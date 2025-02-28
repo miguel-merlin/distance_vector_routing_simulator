@@ -54,7 +54,7 @@ class Network {
       return null;
     }
 
-    let path: string[] = [sourceId];
+    const path: string[] = [sourceId];
     let current = sourceId;
     const maxHops = this.nodes.size;
     let hops = 0;
