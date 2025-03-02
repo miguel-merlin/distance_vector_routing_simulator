@@ -1,4 +1,4 @@
-import Simulator from "./frontend/Simulator"
+import { Simulator } from "./frontend/Simulator"
 
 function App() {
   return (

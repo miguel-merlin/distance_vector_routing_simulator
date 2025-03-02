@@ -1,13 +1,13 @@
 import type { EntityMap } from "./components/entity"
-import Node from "./components/Node"
-import Edge from "./components/Edge"
+import { Node } from "./components/Node"
+import { Edge } from "./components/Edge"
 import { Stage, Layer } from 'react-konva'
 
 interface Simulator {
 
 }
 
-export default function Simulator(_props: Simulator) {
+export function Simulator(_props: Simulator) {
     const env: EntityMap = {
         map: {
             1: { id: 1, name: 'A', x: 50, y: 50 },
