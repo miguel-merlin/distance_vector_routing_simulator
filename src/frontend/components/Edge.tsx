@@ -1,6 +1,7 @@
-import type { uid, BaseEntity, EntityMap } from "./entity"
+import { uid, BaseEntity, EntityContext } from "./entity"
 import type { NodeEntity } from "./Node"
 import { Line } from "react-konva"
+import { useContext } from "react"
 
 export interface EdgeEntity extends BaseEntity {
     head: uid
@@ -8,9 +9,9 @@ export interface EdgeEntity extends BaseEntity {
     reversed?: boolean
 }
 
-export function Edge(props: EdgeEntity & Required<EntityMap>) {
+export function Edge(props: EdgeEntity) {
+    const map = useContext(EntityContext)
     const { head, tail } = props;
-    const { map } = props;
 
     const h = map[head] as NodeEntity;
     const t = map[tail] as NodeEntity;
