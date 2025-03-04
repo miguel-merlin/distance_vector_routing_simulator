@@ -1,4 +1,5 @@
 import { createContext } from "react"
+import { BaseAttr } from "./attributes"
 
 export type uid = number
 
@@ -27,8 +28,13 @@ export class Entity {
     getAs<T extends BaseEntity>(): T {
         return (this.ent as T)
     }
+
+    getAttr<F extends BaseAttr>(): F {
+        return (this.ent as F)
+    }
 }
 
 export type EntityMap = Record<uid, Entity>
 
 export const EntityContext: React.Context<EntityMap> = createContext({})
+export type EntityProp = { ent: Entity }
