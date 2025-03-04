@@ -9,7 +9,7 @@ export interface NodeAttr extends BaseAttr {
 export type NodeEntity = BaseEntity
     & NodeAttr
     & PositionAttr
-    & DecorateAttr
+    & Partial<DecorateAttr>
 
 export function Node({ ent }: EntityProp) {
     const { x, y } = ent.getAttr<PositionAttr>()

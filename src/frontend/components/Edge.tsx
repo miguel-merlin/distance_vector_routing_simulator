@@ -11,7 +11,7 @@ export interface EdgeAttr extends BaseAttr {
 
 export type EdgeEntity = BaseEntity
     & EdgeAttr
-    & DecorateAttr
+    & Partial<DecorateAttr>
 
 export function Edge({ ent }: EntityProp) {
     const map = useContext(EntityContext)
