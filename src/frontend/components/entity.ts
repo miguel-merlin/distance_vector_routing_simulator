@@ -6,7 +6,6 @@ export type uid = number
 export interface BaseEntity {
     id: uid
     name: string
-    type: undefined
 }
 
 export class Entity {
@@ -21,9 +20,11 @@ export class Entity {
         this.ent = e
     }
 
+    /*
     is(t: symbol): boolean {
         return (this.ent as BaseEntity).type === t
     }
+    */
 
     getAs<T extends BaseEntity>(): T {
         return (this.ent as T)

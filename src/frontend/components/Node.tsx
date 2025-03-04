@@ -2,16 +2,14 @@ import { type BaseEntity, type EntityProp } from "./entity"
 import { type PositionAttr, type DecorateAttr, type BaseAttr } from "./attributes"
 import { Circle } from "react-konva"
 
-export const NODE_SYMBOL = Symbol()
-
 export interface NodeAttr extends BaseAttr {
-    type: (typeof NODE_SYMBOL)
+    
 }
 
-export type NodeEntity = BaseEntity 
-    & NodeAttr
-    & PositionAttr 
-    & DecorateAttr 
+export interface NodeEntity extends 
+    BaseEntity, 
+    NodeAttr, PositionAttr, DecorateAttr 
+    {}
 
 export function Node({ ent }: EntityProp) {
     const { x, y } = ent.getAttr<PositionAttr>()
