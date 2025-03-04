@@ -6,10 +6,10 @@ export interface NodeAttr extends BaseAttr {
     
 }
 
-export interface NodeEntity extends 
-    BaseEntity, 
-    NodeAttr, PositionAttr, DecorateAttr 
-    {}
+export type NodeEntity = BaseEntity
+    & NodeAttr
+    & PositionAttr
+    & DecorateAttr
 
 export function Node({ ent }: EntityProp) {
     const { x, y } = ent.getAttr<PositionAttr>()
