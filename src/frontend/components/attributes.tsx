@@ -1,10 +1,10 @@
 export interface BaseAttr {}
 
 export interface DecorateAttr extends BaseAttr {
-    fill?: string
-    stroke?: string
+    fill: string | "green"
+    stroke: string | "black"
     label?: string
-    labelClr?: string
+    labelClr: string | "black"
 }
 
 export interface PositionAttr extends BaseAttr {
