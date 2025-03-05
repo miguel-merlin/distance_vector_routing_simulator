@@ -3,7 +3,10 @@ import { type PositionAttr, type BaseAttr, type DecorateAttr } from "./attribute
 import { Line } from "react-konva"
 import { useContext } from "react"
 
+export const ET_EDGE = Symbol("Key that denotes an Edge Entity")
+
 export interface EdgeAttr extends BaseAttr {
+    type: typeof ET_EDGE
     head: uid
     tail: uid
     reversed?: boolean
