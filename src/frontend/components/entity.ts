@@ -20,11 +20,9 @@ export class Entity {
         this.ent = e
     }
 
-    /*
     is(t: symbol): boolean {
-        return (this.ent as BaseEntity).type === t
+        return (this.ent as any).type === t
     }
-    */
 
     getAs<T extends BaseEntity>(): T {
         return (this.ent as T)
