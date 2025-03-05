@@ -33,7 +33,7 @@ export class Entity {
     }
 }
 
-export type EntityMap = Record<uid, Entity>
+export type EntityMap = Map<uid, Entity>
 
-export const EntityContext: React.Context<EntityMap> = createContext({})
+export const EntityContext: React.Context<EntityMap> = createContext(new Map())
 export type EntityProp = { ent: Entity }

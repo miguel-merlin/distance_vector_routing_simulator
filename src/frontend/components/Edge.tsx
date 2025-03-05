@@ -20,8 +20,15 @@ export function Edge({ ent }: EntityProp) {
     const map = useContext(EntityContext)
     const { head, tail } = ent.getAttr<EdgeAttr>();
 
-    const h = map[head].getAttr<PositionAttr>();
-    const t = map[tail].getAttr<PositionAttr>();
+    const hEnt = map.get(head)
+    const tEnt = map.get(tail)
+
+    if(!hEnt || !tEnt) {
+        throw new Error("Edge's head or tail is undefined")
+    }
+
+    const h = hEnt.getAttr<PositionAttr>();
+    const t = tEnt.getAttr<PositionAttr>();
 
     return <Line points={[h.x, h.y, t.x, t.y]} strokeEnabled stroke="white"/>
 }
