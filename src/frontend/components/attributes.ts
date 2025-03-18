@@ -5,7 +5,10 @@ export interface DecorateAttr extends BaseAttr {
     stroke: string
     strokeWeight: number
     highlightColor?: string
-    label?: string
+}
+
+export interface LabelAttr extends BaseAttr {
+    label: string
     labelClr: string
 }
 
