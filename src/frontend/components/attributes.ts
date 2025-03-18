@@ -3,6 +3,8 @@ export interface BaseAttr {}
 export interface DecorateAttr extends BaseAttr {
     fill: string
     stroke: string
+    strokeWeight: number
+    highlightColor?: string
     label?: string
     labelClr: string
 }
