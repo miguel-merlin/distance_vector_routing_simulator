@@ -9,7 +9,7 @@ export interface DecorateAttr extends BaseAttr {
 
 export interface LabelAttr extends BaseAttr {
     label: string
-    labelClr: string
+    labelClr?: string
 }
 
 export interface PositionAttr extends BaseAttr {
