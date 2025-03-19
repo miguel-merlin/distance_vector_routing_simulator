@@ -28,8 +28,9 @@ export class Entity {
         return (this.ent as T)
     }
 
-    getAttr<F extends BaseAttr>(): F {
-        return (this.ent as F)
+    getAttr<F extends BaseAttr>(defaults?: F): F {
+        const attr = this.ent as F
+        return defaults ? {...defaults, ...attr} : attr
     }
 }
 
