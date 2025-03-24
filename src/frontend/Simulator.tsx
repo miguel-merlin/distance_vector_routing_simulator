@@ -1,7 +1,7 @@
 import { Stage, Layer } from 'react-konva'
 import { type EntityMap, EntityContext, Entity } from "./util/entity"
-import { Node, type NodeEntity } from "./components/Node"
-import { Edge, type EdgeEntity } from "./components/Edge"
+import Node, { type NodeEntity } from "./components/Node"
+import Edge, { type EdgeEntity } from "./components/Edge"
 import { ET_NODE, ET_EDGE } from "./util/entity-sym"
 
 interface Simulator {

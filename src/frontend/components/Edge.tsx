@@ -15,7 +15,7 @@ export type EdgeEntity = BaseEntity
     & EdgeAttr
     & Partial<DecorateAttr>
 
-export function Edge({ ent }: EntityProp) {
+export default function Edge({ ent }: EntityProp) {
     const map = useContext(EntityContext)
     const { head, tail } = ent.getAttr<EdgeAttr>();
 

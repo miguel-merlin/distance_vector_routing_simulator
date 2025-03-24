@@ -12,7 +12,7 @@ export type NodeEntity = BaseEntity
     & PositionAttr
     & Partial<DecorateAttr>
 
-export function Node({ ent }: EntityProp) {
+export default function Node({ ent }: EntityProp) {
     const { x, y } = ent.getAttr<PositionAttr>()
     return <Circle x={x} y={y} radius={25} fill='green'/>
 }
