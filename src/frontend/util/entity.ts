@@ -16,12 +16,12 @@ export class Entity {
     }
 
     /** Use static method of<T>() for better type safety */
-    constructor(e: any) {
+    constructor(e: unknown) {
         this.ent = e
     }
 
     is(t: symbol): boolean {
-        return (this.ent as any).type === t
+        return (this.ent as {type: symbol}).type === t
     }
 
     getAs<T extends BaseEntity>(): T {
