@@ -1,8 +1,7 @@
 import { type BaseEntity, type EntityProp } from "../util/entity"
 import { type PositionAttr, type DecorateAttr, type BaseAttr } from "../util/attributes"
+import { ET_NODE } from "../util/entity-sym"
 import { Circle } from "react-konva"
-
-export const ET_NODE = Symbol("Key that denotes a Node Entity")
 
 export interface NodeAttr extends BaseAttr {
     type: typeof ET_NODE
