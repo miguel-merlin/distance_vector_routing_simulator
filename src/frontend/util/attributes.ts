@@ -3,8 +3,13 @@ export interface BaseAttr {}
 export interface DecorateAttr extends BaseAttr {
     fill: string
     stroke: string
-    label?: string
-    labelClr: string
+}
+
+export interface LabelAttr extends BaseAttr {
+    label: string
+    labelClr?: string
+    fontSize?: string
+    fontFamily?: string
 }
 
 export interface PositionAttr extends BaseAttr {
