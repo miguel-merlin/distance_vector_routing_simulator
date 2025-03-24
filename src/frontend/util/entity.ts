@@ -2,6 +2,8 @@ import { createContext } from "react"
 import { BaseAttr } from "./attributes"
 
 export type uid = number
+export type EntityMap = Map<uid, Entity>
+export type EntityProp = { ent: Entity }
 
 export interface BaseEntity {
     id: uid
@@ -33,7 +35,4 @@ export class Entity {
     }
 }
 
-export type EntityMap = Map<uid, Entity>
-
 export const EntityContext: React.Context<EntityMap> = createContext(new Map())
-export type EntityProp = { ent: Entity }

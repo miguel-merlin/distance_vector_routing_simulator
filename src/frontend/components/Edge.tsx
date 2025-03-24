@@ -1,8 +1,8 @@
-import { uid, BaseEntity, EntityContext, EntityProp } from "../util/entity"
-import { type PositionAttr, type BaseAttr, type DecorateAttr } from "../util/attributes"
-import { ET_EDGE } from "../util/entity-sym"
 import { Line } from "react-konva"
 import { useContext } from "react"
+import { type uid, BaseEntity, EntityContext, EntityProp } from "../util/entity"
+import { type PositionAttr, type BaseAttr, type DecorateAttr } from "../util/attributes"
+import { ET_EDGE } from "../util/entity-sym"
 
 export interface EdgeAttr extends BaseAttr {
     type: typeof ET_EDGE
