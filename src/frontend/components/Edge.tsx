@@ -1,5 +1,5 @@
-import { uid, BaseEntity, EntityContext, EntityProp } from "./entity"
-import { type PositionAttr, type BaseAttr, type DecorateAttr } from "./attributes"
+import { uid, BaseEntity, EntityContext, EntityProp } from "../util/entity"
+import { type PositionAttr, type BaseAttr, type DecorateAttr } from "../util/attributes"
 import { Line } from "react-konva"
 import { useContext } from "react"
 
