@@ -1,9 +1,8 @@
-import { uid, BaseEntity, EntityContext, EntityProp } from "./entity"
-import { type PositionAttr, type BaseAttr, type DecorateAttr } from "./attributes"
 import { Line } from "react-konva"
 import { useContext } from "react"
-
-export const ET_EDGE = Symbol("Key that denotes an Edge Entity")
+import { type uid, BaseEntity, EntityContext, EntityProp } from "../util/entity"
+import { type PositionAttr, type BaseAttr, type DecorateAttr } from "../util/attributes"
+import { ET_EDGE } from "../util/entity-sym"
 
 export interface EdgeAttr extends BaseAttr {
     type: typeof ET_EDGE
@@ -16,7 +15,7 @@ export type EdgeEntity = BaseEntity
     & EdgeAttr
     & Partial<DecorateAttr>
 
-export function Edge({ ent }: EntityProp) {
+export default function Edge({ ent }: EntityProp) {
     const map = useContext(EntityContext)
     const { head, tail } = ent.getAttr<EdgeAttr>();
 

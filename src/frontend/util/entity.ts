@@ -2,6 +2,8 @@ import { createContext } from "react"
 import { BaseAttr } from "./attributes"
 
 export type uid = number
+export type EntityMap = Map<uid, Entity>
+export type EntityProp = { ent: Entity }
 
 export interface BaseEntity {
     id: uid
@@ -16,12 +18,12 @@ export class Entity {
     }
 
     /** Use static method of<T>() for better type safety */
-    constructor(e: any) {
+    constructor(e: unknown) {
         this.ent = e
     }
 
     is(t: symbol): boolean {
-        return (this.ent as any).type === t
+        return (this.ent as {type: symbol}).type === t
     }
 
     getAs<T extends BaseEntity>(): T {
@@ -33,7 +35,4 @@ export class Entity {
     }
 }
 
-export type EntityMap = Map<uid, Entity>
-
 export const EntityContext: React.Context<EntityMap> = createContext(new Map())
-export type EntityProp = { ent: Entity }
