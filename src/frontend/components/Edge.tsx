@@ -1,7 +1,7 @@
 import { Line } from "react-konva"
 import { useContext } from "react"
 import { type uid, BaseEntity, EntityContext, EntityProp } from "../util/entity"
-import { type PositionAttr, type BaseAttr, type DecorateAttr } from "../util/attributes"
+import { type PositionAttr, type BaseAttr, type ColorAttr } from "../util/attributes"
 import { ET_EDGE } from "../util/entity-sym"
 
 export interface EdgeAttr extends BaseAttr {
@@ -13,7 +13,7 @@ export interface EdgeAttr extends BaseAttr {
 
 export type EdgeEntity = BaseEntity
     & EdgeAttr
-    & Partial<DecorateAttr>
+    & ColorAttr
 
 export default function Edge({ ent }: EntityProp) {
     const map = useContext(EntityContext)
