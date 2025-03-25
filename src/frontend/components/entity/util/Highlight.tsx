@@ -3,6 +3,7 @@ import { ET_EDGE, ET_NODE } from "../../../util/typings"
 
 export interface HighlightConfigProps {
     color: string
+    visible: boolean
 }
 
 export interface CircleHighlightProps extends HighlightConfigProps {
@@ -17,12 +18,12 @@ export interface LineHighlightProps extends HighlightConfigProps {
 
 export type HighlightProps = CircleHighlightProps | LineHighlightProps
 
-function LineHighlight({ points, color }: LineHighlightProps) {
-    return <Line points={points} stroke={color} strokeWidth={5}/>
+function LineHighlight({ points, color, visible }: LineHighlightProps) {
+    return <Line points={points} stroke={color} strokeWidth={5} visible={visible}/>
 }
 
-function CircleHighlight({ size, color }: CircleHighlightProps) {
-    return <Circle fill={color} radius={size + 5} strokeEnabled={false}/>
+function CircleHighlight({ size, color, visible }: CircleHighlightProps) {
+    return <Circle fill={color} radius={size + 5} strokeEnabled={false} visible={visible}/>
 }
 
 export default function Highlight(props: HighlightProps) {

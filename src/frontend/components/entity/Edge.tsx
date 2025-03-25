@@ -1,5 +1,5 @@
 import { Group, Line } from "react-konva"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { type uid, BaseEntity, EntityContext, EntityProp } from "../../util/entity"
 import { type PositionAttr, type BaseAttr, type ColorAttr } from "../../util/attributes"
 import { ET_EDGE } from "../../util/typings"
@@ -17,6 +17,7 @@ export type EdgeEntity = BaseEntity
     & ColorAttr
 
 export default function Edge({ ent }: EntityProp) {
+    const [hovered, setHovered] = useState(false)
     const map = useContext(EntityContext)
     const { head, tail } = ent.getAttr<EdgeAttr>();
 
@@ -34,8 +35,8 @@ export default function Edge({ ent }: EntityProp) {
     const { strokeClr, highlightClr } = ent.getAttrReq<ColorAttr>();
 
     return (
-        <Group>
-            <Highlight type="ET_EDGE" color={highlightClr} points={points}/>
+        <Group onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+            <Highlight type="ET_EDGE" color={highlightClr} points={points} visible={hovered}/>
             <Line points={points} stroke={strokeClr}/>
         </Group>
         
