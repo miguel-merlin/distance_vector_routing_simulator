@@ -1,7 +1,7 @@
 import { Circle } from "react-konva"
-import { type BaseEntity, type EntityProp } from "../util/entity"
-import { type PositionAttr, type ColorAttr, type BaseAttr, type LabelAttr } from "../util/attributes"
-import { ET_NODE } from "../util/typings"
+import { type BaseEntity, type EntityProp } from "../../util/entity"
+import { type PositionAttr, type ColorAttr, type BaseAttr, type LabelAttr } from "../../util/attributes"
+import { ET_NODE } from "../../util/typings"
 
 export interface NodeAttr extends BaseAttr {
     type: ET_NODE
