@@ -22,7 +22,7 @@ export default function Node({ ent }: EntityProp) {
     return (
         <Group x={x} y={y}>
             <Highlight type="ET_NODE" color={highlightClr} size={25}/>
-            <Circle fill={fillClr} stroke={strokeClr}/>
+            <Circle fill={fillClr} stroke={strokeClr} radius={25} strokeEnabled/>
             <Label label={label} color={labelClr} fontFamily={fontFamily} fontSize={fontSize}/>
         </Group>
     )

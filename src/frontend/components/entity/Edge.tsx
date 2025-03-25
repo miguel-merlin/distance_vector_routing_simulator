@@ -31,12 +31,12 @@ export default function Edge({ ent }: EntityProp) {
     const t = tEnt.getAttr<PositionAttr>();
     const points = [h.x, h.y, t.x, t.y];
 
-    const { strokeClr, highlightClr } = hEnt.getAttrReq<ColorAttr>();
+    const { strokeClr, highlightClr } = ent.getAttrReq<ColorAttr>();
 
     return (
         <Group>
-            <Line points={points} stroke={strokeClr}/>
             <Highlight type="ET_EDGE" color={highlightClr} points={points}/>
+            <Line points={points} stroke={strokeClr}/>
         </Group>
         
     )

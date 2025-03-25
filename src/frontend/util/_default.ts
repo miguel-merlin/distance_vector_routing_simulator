@@ -16,11 +16,11 @@ const defaultResolvers: Record<ATR, DefaultMap> = {
     ATR_COLOR: {
         fillClr: (_: Entity) => Util.getRandomColor(),
         strokeClr: 'black',
-        highlightClr: (e: Entity) => (e.getAttr<ColorAttr>()).fillClr,
+        highlightClr: (e: Entity) => e.is("ET_EDGE") ? "yellow" : (e.getAttr<ColorAttr>().fillClr),
         labelClr: 'black'
     },
     ATR_LABEL: {
-        label: (e: Entity) => (e.getAs<BaseEntity>).name,
+        label: (e: Entity) => (e.getAs<BaseEntity>()).name,
         fontSize: 16,
         fontFamily: undefined
     },

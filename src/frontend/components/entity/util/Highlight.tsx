@@ -18,11 +18,11 @@ export interface LineHighlightProps extends HighlightConfigProps {
 export type HighlightProps = CircleHighlightProps | LineHighlightProps
 
 function LineHighlight({ points, color }: LineHighlightProps) {
-    return <Line points={points} fill={color} scaleY={1.5}/>
+    return <Line points={points} stroke={color} strokeWidth={5}/>
 }
 
 function CircleHighlight({ size, color }: CircleHighlightProps) {
-    return <Circle fill={color} radius={size + 2.5} strokeEnabled={false}/>
+    return <Circle fill={color} radius={size + 5} strokeEnabled={false}/>
 }
 
 export default function Highlight(props: HighlightProps) {
