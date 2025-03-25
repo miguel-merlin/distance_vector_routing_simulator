@@ -1,8 +1,7 @@
 import { JSX, useState } from "react"
 import AddEdge from "./components/control/panel/AddEdge"
 import AddNode from "./components/control/panel/AddNode"
-import DeleteNode from "./components/control/panel/DeleteNode"
-import DeleteEdge from "./components/control/panel/DeleteEdge"
+import Delete from "./components/control/panel/Delete"
 import Scrubber from "./components/control/Scrubber"
 
 type StateDispatch<T> = React.Dispatch<React.SetStateAction<T>>
@@ -10,8 +9,7 @@ type StateDispatch<T> = React.Dispatch<React.SetStateAction<T>>
 const actionMap = [
     { msg: "Add Node", panel: <AddNode/> },
     { msg: "Add Edge", panel: <AddEdge/> },
-    { msg: "Delete Node", panel: <DeleteNode/> },
-    { msg: "Delete Edge", panel: <DeleteEdge/> }
+    { msg: "Delete", panel: <Delete/> }
 ]
 
 function panelChanger(setter: StateDispatch<JSX.Element>, to: JSX.Element) {
