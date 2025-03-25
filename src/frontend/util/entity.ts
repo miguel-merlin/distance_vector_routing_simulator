@@ -1,5 +1,7 @@
 import { createContext } from "react"
 import { BaseAttr } from "./attributes"
+import { ET } from "./typings"
+import { fillWithDefaults } from "./_default"
 
 export type uid = number
 export type EntityMap = Map<uid, Entity>
@@ -14,7 +16,8 @@ export class Entity {
     ent: unknown
 
     static of<T extends BaseEntity>(ent: T): Entity {
-        return new Entity(ent)
+        const e = new Entity(ent);
+        return fillWithDefaults(e, e.getType())
     }
 
     /** Use static method of<T>() for better type safety */
@@ -22,8 +25,12 @@ export class Entity {
         this.ent = e
     }
 
-    is(t: symbol): boolean {
-        return (this.ent as {type: symbol}).type === t
+    is(t: ET): boolean {
+        return this.getType() === t
+    }
+
+    getType(): ET {
+        return (this.ent as {type: ET}).type
     }
 
     getAs<T extends BaseEntity>(): T {
@@ -32,6 +39,10 @@ export class Entity {
 
     getAttr<F extends BaseAttr>(): F {
         return (this.ent as F)
+    }
+
+    getAttrReq<F extends BaseAttr>(): Required<F> {
+        return (this.ent as Required<F>)
     }
 }
 
