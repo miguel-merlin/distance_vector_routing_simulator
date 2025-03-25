@@ -9,7 +9,7 @@ export interface ColorAttr extends BaseAttr {
 
 export interface LabelAttr extends BaseAttr {
     label?: string
-    fontSize?: string
+    fontSize?: number
     fontFamily?: string
 }
 
