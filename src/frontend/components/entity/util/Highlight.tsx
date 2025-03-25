@@ -1,16 +1,17 @@
 import { Line, Circle } from "react-konva"
-import { ET } from "../../../util/typings"
+import { ET_EDGE, ET_NODE } from "../../../util/typings"
 
 export interface HighlightConfigProps {
-    type: ET
     color: string
 }
 
 export interface CircleHighlightProps extends HighlightConfigProps {
+    type: ET_NODE
     size: number
 }
 
 export interface LineHighlightProps extends HighlightConfigProps {
+    type: ET_EDGE
     points: number[]
 }
 
@@ -24,7 +25,7 @@ function CircleHighlight({ size, color }: CircleHighlightProps) {
     return <Circle fill={color} radius={size + 2.5} strokeEnabled={false}/>
 }
 
-export default function Highlight(props: HighlightConfigProps) {
+export default function Highlight(props: HighlightProps) {
     switch(props.type) {
         case "ET_NODE": return CircleHighlight(props as CircleHighlightProps)
         case "ET_EDGE": return LineHighlight(props as LineHighlightProps)

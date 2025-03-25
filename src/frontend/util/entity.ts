@@ -40,6 +40,10 @@ export class Entity {
     getAttr<F extends BaseAttr>(): F {
         return (this.ent as F)
     }
+
+    getAttrReq<F extends BaseAttr>(): Required<F> {
+        return (this.ent as Required<F>)
+    }
 }
 
 export const EntityContext: React.Context<EntityMap> = createContext(new Map())

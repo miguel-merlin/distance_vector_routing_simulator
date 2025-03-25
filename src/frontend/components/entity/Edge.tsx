@@ -1,8 +1,9 @@
-import { Line } from "react-konva"
+import { Group, Line } from "react-konva"
 import { useContext } from "react"
 import { type uid, BaseEntity, EntityContext, EntityProp } from "../../util/entity"
 import { type PositionAttr, type BaseAttr, type ColorAttr } from "../../util/attributes"
 import { ET_EDGE } from "../../util/typings"
+import Highlight from "./util/Highlight"
 
 export interface EdgeAttr extends BaseAttr {
     type: ET_EDGE
@@ -28,6 +29,15 @@ export default function Edge({ ent }: EntityProp) {
 
     const h = hEnt.getAttr<PositionAttr>();
     const t = tEnt.getAttr<PositionAttr>();
+    const points = [h.x, h.y, t.x, t.y];
 
-    return <Line points={[h.x, h.y, t.x, t.y]} strokeEnabled stroke="white"/>
+    const { strokeClr, highlightClr } = hEnt.getAttrReq<ColorAttr>();
+
+    return (
+        <Group>
+            <Line points={points} stroke={strokeClr}/>
+            <Highlight type="ET_EDGE" color={highlightClr} points={points}/>
+        </Group>
+        
+    )
 }
