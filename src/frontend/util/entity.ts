@@ -1,5 +1,6 @@
 import { createContext } from "react"
 import { BaseAttr } from "./attributes"
+import { ET } from "./typings"
 
 export type uid = number
 export type EntityMap = Map<uid, Entity>
@@ -22,8 +23,12 @@ export class Entity {
         this.ent = e
     }
 
-    is(t: symbol): boolean {
-        return (this.ent as {type: symbol}).type === t
+    is(t: ET): boolean {
+        return this.getType() === t
+    }
+
+    getType(): ET {
+        return (this.ent as {type: ET}).type
     }
 
     getAs<T extends BaseEntity>(): T {

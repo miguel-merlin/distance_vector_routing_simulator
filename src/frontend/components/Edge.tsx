@@ -2,10 +2,10 @@ import { Line } from "react-konva"
 import { useContext } from "react"
 import { type uid, BaseEntity, EntityContext, EntityProp } from "../util/entity"
 import { type PositionAttr, type BaseAttr, type ColorAttr } from "../util/attributes"
-import { ET_EDGE } from "../util/entity-sym"
+import { ET_EDGE } from "../util/typings"
 
 export interface EdgeAttr extends BaseAttr {
-    type: typeof ET_EDGE
+    type: ET_EDGE
     head: uid
     tail: uid
     reversed?: boolean
