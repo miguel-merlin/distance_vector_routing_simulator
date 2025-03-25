@@ -1,6 +1,7 @@
 import { createContext } from "react"
 import { BaseAttr } from "./attributes"
 import { ET } from "./typings"
+import { fillWithDefaults } from "./_default"
 
 export type uid = number
 export type EntityMap = Map<uid, Entity>
@@ -15,7 +16,8 @@ export class Entity {
     ent: unknown
 
     static of<T extends BaseEntity>(ent: T): Entity {
-        return new Entity(ent)
+        const e = new Entity(ent);
+        return fillWithDefaults(e, e.getType())
     }
 
     /** Use static method of<T>() for better type safety */
