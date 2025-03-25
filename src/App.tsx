@@ -1,11 +1,11 @@
 import { Simulator } from "./frontend/Simulator"
-
+import ControlUI from "./frontend/ControlUI"
 function App() {
   return (
-    <>
-      <h1>Hello World</h1>
+    <div>
       <Simulator/>
-    </>
+      <ControlUI/>
+    </div>
   )
 }
 
