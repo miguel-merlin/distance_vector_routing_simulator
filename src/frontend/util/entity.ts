@@ -3,7 +3,7 @@ import { BaseAttr } from "./attributes"
 import { ET } from "./typings"
 import { fillWithDefaults } from "./_default"
 
-export type uid = number
+export type uid = string
 export type EntityMap = Map<uid, Entity>
 export type EntityProp = { ent: Entity }
 
