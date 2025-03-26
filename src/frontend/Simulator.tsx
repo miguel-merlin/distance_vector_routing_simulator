@@ -1,27 +1,27 @@
 import { Stage, Layer } from 'react-konva'
-import { type EntityMap, EntityContext, Entity } from "./util/entity"
-import Node, { type NodeEntity } from "./components/entity/Node"
-import Edge, { type EdgeEntity } from "./components/entity/Edge"
+import { type EntityMap, EntityContext } from "./util/entity"
+import Node from "./components/entity/Node"
+import Edge from "./components/entity/Edge"
 
-interface Simulator {
-
+interface SimulatorProps {
+    env: EntityMap
 }
 
-export function Simulator(_props: Simulator) {
-    const env: EntityMap = new Map()
-    env.set(1, Entity.of<NodeEntity>({ type: "ET_NODE", id: 1, name: 'A', x: 50, y: 50, size: 25 }))
-    env.set(2, Entity.of<NodeEntity>({ type: "ET_NODE", id: 2, name: 'B', x: 300, y: 100, size: 25 }))
-    env.set(3, Entity.of<EdgeEntity>({ type: "ET_EDGE", id: 3, name: 'e1', head: 1, tail: 2 }))
+export function Simulator({ env }: SimulatorProps) {
+    const ents = Array.from(env.values())
 
     return (
         <Stage width={500} height={500}>
             <EntityContext value={env}>
                 <Layer>
-                    <Edge ent={env.get(3) as Entity}/>
+                    { ents.filter((e) => e.is("ET_EDGE")) 
+                        .map((e) => <Edge ent={e}/>)
+                    }
                 </Layer>
                 <Layer>
-                    <Node ent={env.get(1) as Entity}/>
-                    <Node ent={env.get(2) as Entity}/>
+                    { ents.filter((e) => e.is("ET_NODE"))
+                        .map((e) => <Node ent={e}/>)
+                    }
                 </Layer>
             </EntityContext>
         </Stage>
