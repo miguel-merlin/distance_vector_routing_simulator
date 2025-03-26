@@ -8,6 +8,10 @@ export default function AddNode() {
             <input/>
             <label>Name</label>
             <input/>
+            <label>X</label>
+            <input/>
+            <label>Y</label>
+            <input/>
         </PanelWrapper>
     )
 }
