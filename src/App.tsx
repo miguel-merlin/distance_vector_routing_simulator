@@ -13,7 +13,7 @@ function App() {
           <Simulator env={entMap}/>
         </div>
         <div className="w-[250px] h-[500px]">
-          <ControlUI/>
+          <ControlUI env={entMap} setEnv={setEntMap}/>
         </div>
       </div>
     </div>
