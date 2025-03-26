@@ -4,12 +4,12 @@ export default function Scrubber() {
     const [isPlaying, setPlaying] = useState<boolean>(false);
 
     return (
-        <div>
-            <button>Step Back</button>
+        <div className="flex justify-center gap-2">
+            <button>⏪</button>
             <button onClick={() => setPlaying(!isPlaying)}>
-                { isPlaying ? "Pause" : "Play" }
+                { isPlaying ? "⏸" : "⏵" }
             </button>
-            <button>Step Forward</button>
+            <button>⏩</button>
         </div>
     )
 }

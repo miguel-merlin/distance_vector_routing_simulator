@@ -6,7 +6,7 @@ export interface PanelWrapperProps {
 
 export default function PanelWrapper({children}: PanelWrapperProps) {
     return (
-        <form>
+        <form className="w-full h-full flex flex-col gap-y-2 p-5">
             { children }
             <button>Submit</button>
         </form>

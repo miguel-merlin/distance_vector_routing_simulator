@@ -1,1 +1,16 @@
 @import "tailwindcss";
+
+@layer components {
+    button {
+        background-color: var(--color-white);
+        border-width: 2px;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        padding: 2px;
+    }
+
+    input {
+        background-color: var(--color-white);
+        border-width: 2px;
+    }
+}

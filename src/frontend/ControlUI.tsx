@@ -20,15 +20,17 @@ export default function ControlUI() {
     const [panel, setPanel] = useState<JSX.Element>(<></>)
 
     return (
-        <div>
-            <Scrubber/>
-            <div>
-                { actionMap.map(
-                    ({ msg, panel }) => 
-                        <button onClick={panelChanger(setPanel, panel)}>
-                            { msg }
-                        </button>
-                )}
+        <div className="w-full h-full">
+            <div className="border-b-2 flex flex-col justify-center p-2 gap-2">
+                <Scrubber/>
+                <div className="flex justify-center gap-2">
+                    { actionMap.map(
+                        ({ msg, panel }) => 
+                            <button onClick={panelChanger(setPanel, panel)}>
+                                { msg }
+                            </button>
+                    )}
+                </div>
             </div>
             <div> { panel } </div>
         </div>
