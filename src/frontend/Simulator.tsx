@@ -15,12 +15,12 @@ export function Simulator({ env }: SimulatorProps) {
             <EntityContext value={env}>
                 <Layer>
                     { ents.filter((e) => e.is("ET_EDGE")) 
-                        .map((e) => <Edge ent={e}/>)
+                        .map((e, idx) => <Edge key={idx} ent={e}/>)
                     }
                 </Layer>
                 <Layer>
                     { ents.filter((e) => e.is("ET_NODE"))
-                        .map((e) => <Node ent={e}/>)
+                        .map((e, idx) => <Node key={idx} ent={e}/>)
                     }
                 </Layer>
             </EntityContext>
