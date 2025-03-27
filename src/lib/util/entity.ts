@@ -2,10 +2,12 @@ import { createContext } from "react"
 import { BaseAttr } from "./attributes"
 import { ET } from "./typings"
 import { fillWithDefaults } from "./_default"
+import Network from "+/interfaces/Network"
 
 export type uid = string
 export type EntityMap = Map<uid, Entity>
 export type EntityProp = { ent: Entity }
+export type EntityNetwork = { network: Network }
 
 export interface BaseEntity {
     id: uid

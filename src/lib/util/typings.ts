@@ -1,8 +1,9 @@
 /** ENTITY **/
 export type ET = 
-    ET_NODE | ET_EDGE
+    ET_NODE | ET_EDGE | ET_EMIT
 export type ET_NODE = "ET_NODE"
 export type ET_EDGE = "ET_EDGE"
+export type ET_EMIT = "ET_EMIT"
 
 /** ATTRIBUTES **/
 export type ATR =
