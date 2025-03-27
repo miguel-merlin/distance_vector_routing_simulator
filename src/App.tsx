@@ -1,7 +1,7 @@
-import { Simulator } from "./frontend/Simulator"
-import ControlUI from "./frontend/ControlUI"
+import { Simulator } from "@/Simulator"
+import ControlUI from "@/ControlUI"
 import { useState } from "react"
-import { EntityMap } from "./frontend/util/entity"
+import { EntityMap } from "+/util/entity"
 
 function App() {
   const envState = useState<EntityMap>(new Map())  

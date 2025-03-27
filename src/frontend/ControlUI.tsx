@@ -1,9 +1,9 @@
 import { JSX, useRef, useState } from "react"
 import Scrubber from "./components/control/Scrubber"
-import { EntityMap } from "./util/entity"
+import { EntityMap } from "+/util/entity"
 import Panel from "./components/control/Panel"
-import { ACTION_MAP } from "./util/actions"
-import { RStateHook } from "./util/react-aliases"
+import { ACTION_MAP } from "+/util/actions"
+import { RStateHook } from "+/util/react-aliases"
 import { RawInputContainer } from "./components/control/util/Field"
 
 export interface ControlUIProps {

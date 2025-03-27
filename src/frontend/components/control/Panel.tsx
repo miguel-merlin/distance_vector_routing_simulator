@@ -1,5 +1,5 @@
 import Field, { RawInputContainer } from "./util/Field"
-import { RRefHook } from "../../util/react-aliases"
+import { RRefHook } from "+/util/react-aliases"
 
 type FieldConf = { key: string, label?: string, type: "number" | "string" }
 type InputContainer = Record<string, number | string>

@@ -1,6 +1,6 @@
-import { PanelProps } from "../components/control/Panel";
-import { EdgeEntity } from "../components/entity/Edge";
-import { NodeEntity } from "../components/entity/Node";
+import { PanelProps } from "@/components/control/Panel";
+import { EdgeEntity } from "@/components/entity/Edge";
+import { NodeEntity } from "@/components/entity/Node";
 import { Entity, EntityMap, uid } from "./entity";
 import { RStateHook } from "./react-aliases";
 import { CTRL } from "./typings";

@@ -1,5 +1,5 @@
 import { Stage, Layer } from 'react-konva'
-import { type EntityMap, EntityContext } from "./util/entity"
+import { type EntityMap, EntityContext } from "+/util/entity"
 import Node from "./components/entity/Node"
 import Edge from "./components/entity/Edge"
 
