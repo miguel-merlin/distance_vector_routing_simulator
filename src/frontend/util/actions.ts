@@ -5,7 +5,7 @@ import { Entity, EntityMap, uid } from "./entity";
 import { RStateHook } from "./react-aliases";
 import { CTRL } from "./typings";
 
-export type StatelessPanelProp = Omit<PanelProps, "inputState">
+type StatelessPanelProp = Omit<PanelProps, "inputs">
 type ActionMap = Record<CTRL, (envState: RStateHook<EntityMap>) => StatelessPanelProp>
 
 function saveEntity(envState: RStateHook<EntityMap>, uid: uid, ent: Entity | null) {
