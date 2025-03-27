@@ -15,9 +15,9 @@ const attrMaps: Record<ET, ATR[]> = {
 
 const defaultResolvers: Record<ATR, DefaultMap> = {
     ATR_COLOR: {
-        fillClr: (_: Entity) => Util.getRandomColor(),
+        fillClr: (e: Entity) => e.is("ET_EMIT") ? Util.getRandomColor() : "lightgrey",
         strokeClr: 'black',
-        highlightClr: (e: Entity) => e.is("ET_EDGE") ? "yellow" : (e.getAttr<ColorAttr>().fillClr),
+        highlightClr: (e: Entity) => e.is("ET_EDGE") || e.is("ET_NODE") ? "yellow" : (e.getAttr<ColorAttr>().fillClr),
         labelClr: 'black'
     },
     ATR_LABEL: {
