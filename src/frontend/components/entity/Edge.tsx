@@ -9,6 +9,7 @@ export interface EdgeAttr extends BaseAttr {
     type: ET_EDGE
     head: uid
     tail: uid
+    weight: number
     reversed?: boolean
 }
 

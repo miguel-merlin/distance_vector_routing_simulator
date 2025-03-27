@@ -44,14 +44,16 @@ export const ACTION_MAP: ActionMap = {
         fields: [
             { key: "id", type: "string" },
             { key: "head", label: "Head Id", type: "string" },
-            { key: "tail", label: "Tail Id", type: "string" }
+            { key: "tail", label: "Tail Id", type: "string" },
+            { key: "weight", type: "number" }
         ],
-        onSubmit: ({ id, head, tail }) => {
+        onSubmit: ({ id, head, tail, weight }) => {
             const uid = id as uid
             const ent = Entity.of<EdgeEntity>({
                 type: "ET_EDGE",
                 id: uid,
                 name: uid,
+                weight: weight as number,
                 head: head as uid,
                 tail: tail as uid
             })
