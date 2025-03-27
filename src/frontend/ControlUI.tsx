@@ -14,9 +14,9 @@ export default function ControlUI({ envState }: ControlUIProps) {
     const [panel, setPanel] = useState<JSX.Element>(<></>)
     const inputs = useRef<RawInputContainer>({})
     const actionMap = [
-        { msg: "Add Node", panel: <Panel {...{inputs, ...ACTION_MAP["CTRL_ADDNODE"](envState)}}/> },
-        { msg: "Add Edge", panel: <Panel {...{inputs, ...ACTION_MAP["CTRL_ADDEDGE"](envState)}}/> },
-        { msg: "Delete", panel: <Panel {...{inputs, ...ACTION_MAP["CTRL_DELETE"](envState)}}/> }
+        { msg: "Add Node", panelProps: {inputs, ...ACTION_MAP["CTRL_ADDNODE"](envState)} },
+        { msg: "Add Edge", panelProps: {inputs, ...ACTION_MAP["CTRL_ADDEDGE"](envState)} },
+        { msg: "Delete", panelProps: {inputs, ...ACTION_MAP["CTRL_DELETE"](envState)} }
     ]
 
     return (
@@ -25,9 +25,13 @@ export default function ControlUI({ envState }: ControlUIProps) {
                 <Scrubber/>
                 <div className="flex justify-center gap-2">
                     { actionMap.map(
-                        ({ msg, panel }, idx) => 
-                            <button key={idx} onClick={() => { inputs.current = {}; setPanel(panel) }}>
-                                { msg }
+                        ({ msg, panelProps }, idx) => 
+                            <button key={idx} 
+                                onClick={() => { 
+                                    inputs.current = {} 
+                                    setPanel(<Panel {...panelProps}/>)
+                                }}>
+                                {msg}
                             </button>
                     )}
                 </div>
