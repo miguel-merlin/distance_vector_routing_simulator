@@ -1,5 +1,5 @@
 import { Line, Circle } from "react-konva"
-import { ET_EDGE, ET_NODE } from "../../../util/typings"
+import { ET_EDGE, ET_NODE } from "+/util/typings"
 
 export interface HighlightConfigProps {
     color: string

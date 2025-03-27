@@ -1,8 +1,8 @@
 import { Group, Line } from "react-konva"
 import { useContext, useState } from "react"
-import { type uid, BaseEntity, EntityContext, EntityProp } from "../../util/entity"
-import { type PositionAttr, type BaseAttr, type ColorAttr } from "../../util/attributes"
-import { ET_EDGE } from "../../util/typings"
+import { type uid, BaseEntity, EntityContext, EntityProp } from "+/util/entity"
+import { type PositionAttr, type BaseAttr, type ColorAttr } from "+/util/attributes"
+import { ET_EDGE } from "+/util/typings"
 import Highlight from "./util/Highlight"
 
 export interface EdgeAttr extends BaseAttr {

@@ -1,33 +1,22 @@
-import { JSX, useCallback, useState } from "react"
-import AddEdge from "./components/control/panel/AddEdge"
-import AddNode from "./components/control/panel/AddNode"
-import Delete from "./components/control/panel/Delete"
+import { JSX, useRef, useState } from "react"
 import Scrubber from "./components/control/Scrubber"
-import { Entity, EntityMap, uid } from "./util/entity"
-
-type StateDispatch<T> = React.Dispatch<React.SetStateAction<T>>
-
-function panelChanger(setter: StateDispatch<JSX.Element>, to: JSX.Element) {
-    return () => setter(to)
-}
+import { EntityMap } from "+/util/entity"
+import Panel from "./components/control/Panel"
+import { ACTION_MAP } from "+/util/actions"
+import { RStateHook } from "+/util/react-aliases"
+import { RawInputContainer } from "./components/control/util/Field"
 
 export interface ControlUIProps {
-    env: EntityMap
-    setEnv: StateDispatch<EntityMap>
+    envState: RStateHook<EntityMap>
 }
 
-export default function ControlUI({ env, setEnv }: ControlUIProps) {
+export default function ControlUI({ envState }: ControlUIProps) {
     const [panel, setPanel] = useState<JSX.Element>(<></>)
-    const setter = useCallback((id: uid, ent: Entity | null) => {
-        if(ent) env.set(id, ent)
-        else env.delete(id)
-        setEnv(new Map(env.entries()))
-    }, [env])
-
+    const inputs = useRef<RawInputContainer>({})
     const actionMap = [
-        { msg: "Add Node", panel: <AddNode envSetter={setter}/> },
-        { msg: "Add Edge", panel: <AddEdge envSetter={setter}/> },
-        { msg: "Delete", panel: <Delete envSetter={setter}/> }
+        { msg: "Add Node", panelProps: {inputs, ...ACTION_MAP["CTRL_ADDNODE"](envState)} },
+        { msg: "Add Edge", panelProps: {inputs, ...ACTION_MAP["CTRL_ADDEDGE"](envState)} },
+        { msg: "Delete", panelProps: {inputs, ...ACTION_MAP["CTRL_DELETE"](envState)} }
     ]
 
     return (
@@ -36,9 +25,13 @@ export default function ControlUI({ env, setEnv }: ControlUIProps) {
                 <Scrubber/>
                 <div className="flex justify-center gap-2">
                     { actionMap.map(
-                        ({ msg, panel }) => 
-                            <button onClick={panelChanger(setPanel, panel)}>
-                                { msg }
+                        ({ msg, panelProps }, idx) => 
+                            <button key={idx} 
+                                onClick={() => { 
+                                    inputs.current = {} 
+                                    setPanel(<Panel {...panelProps}/>)
+                                }}>
+                                {msg}
                             </button>
                     )}
                 </div>

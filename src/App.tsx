@@ -1,10 +1,11 @@
-import { Simulator } from "./frontend/Simulator"
-import ControlUI from "./frontend/ControlUI"
+import { Simulator } from "@/Simulator"
+import ControlUI from "@/ControlUI"
 import { useState } from "react"
-import { EntityMap } from "./frontend/util/entity"
+import { EntityMap } from "+/util/entity"
 
 function App() {
-  const [entMap, setEntMap] = useState<EntityMap>(new Map())  
+  const envState = useState<EntityMap>(new Map())  
+  const [entMap] = envState
 
   return (
     <div className="w-screen h-screen grid content-center place-content-center">
@@ -13,7 +14,7 @@ function App() {
           <Simulator env={entMap}/>
         </div>
         <div className="w-[250px] h-[500px]">
-          <ControlUI env={entMap} setEnv={setEntMap}/>
+          <ControlUI envState={envState}/>
         </div>
       </div>
     </div>
