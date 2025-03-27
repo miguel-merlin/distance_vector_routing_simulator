@@ -11,3 +11,10 @@ export type ATR_COLOR = "ATR_COLOR"
 export type ATR_LABEL = "ATR_LABEL"
 export type ATR_POSITION = "ATR_POSITION"
 export type ATR_SHAPE = "ATR_SHAPE"
+
+/** CONTROL ACTIONS */
+export type CTRL =
+    CTRL_ADDNODE | CTRL_ADDEDGE | CTRL_DELETE
+export type CTRL_ADDNODE = "CTRL_ADDNODE"
+export type CTRL_ADDEDGE = "CTRL_ADDEDGE"
+export type CTRL_DELETE = "CTRL_DELETE"

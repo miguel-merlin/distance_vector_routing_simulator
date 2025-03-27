@@ -1,34 +1,33 @@
-import { JSX, useCallback, useState } from "react"
-import AddEdge from "./components/control/panel/AddEdge"
-import AddNode from "./components/control/panel/AddNode"
-import Delete from "./components/control/panel/Delete"
+import { JSX, useEffect, useMemo, useState } from "react"
 import Scrubber from "./components/control/Scrubber"
-import { Entity, EntityMap, uid } from "./util/entity"
-
-type StateDispatch<T> = React.Dispatch<React.SetStateAction<T>>
-
-function panelChanger(setter: StateDispatch<JSX.Element>, to: JSX.Element) {
-    return () => setter(to)
-}
+import { EntityMap } from "./util/entity"
+import Panel, { PanelProps } from "./components/control/Panel"
+import { ACTION_MAP, StatelessPanelProp } from "./util/actions"
+import { RStateHook } from "./util/react-aliases"
+import { RawInputContainer } from "./components/control/util/Field"
 
 export interface ControlUIProps {
-    env: EntityMap
-    setEnv: StateDispatch<EntityMap>
+    envState: RStateHook<EntityMap>
 }
 
-export default function ControlUI({ env, setEnv }: ControlUIProps) {
-    const [panel, setPanel] = useState<JSX.Element>(<></>)
-    const setter = useCallback((id: uid, ent: Entity | null) => {
-        if(ent) env.set(id, ent)
-        else env.delete(id)
-        setEnv(new Map(env.entries()))
-    }, [env])
+function fillAction(container: RStateHook<RawInputContainer>, partialPanel: StatelessPanelProp): PanelProps {
+    return { 
+        inputState: container,
+        ...partialPanel
+    }
+}
 
-    const actionMap = [
-        { msg: "Add Node", panel: <AddNode envSetter={setter}/> },
-        { msg: "Add Edge", panel: <AddEdge envSetter={setter}/> },
-        { msg: "Delete", panel: <Delete envSetter={setter}/> }
-    ]
+export default function ControlUI({ envState }: ControlUIProps) {
+    const [panel, setPanel] = useState<JSX.Element>(<></>)
+    const [idx, setIdx] = useState<number>(0)
+    const inputState = useState<RawInputContainer>({})
+    const actionMap = useMemo(() => [
+        { msg: "Add Node", panel: <Panel {...fillAction(inputState, ACTION_MAP["CTRL_ADDNODE"](envState))}/> },
+        { msg: "Add Edge", panel: <Panel {...fillAction(inputState, ACTION_MAP["CTRL_ADDEDGE"](envState))}/> },
+        { msg: "Delete", panel: <Panel {...fillAction(inputState, ACTION_MAP["CTRL_DELETE"](envState))}/> }
+    ], [inputState[0]])
+
+    useEffect(() => setPanel(actionMap[idx].panel), [inputState[0]])
 
     return (
         <div className="w-full h-full">
@@ -36,8 +35,8 @@ export default function ControlUI({ env, setEnv }: ControlUIProps) {
                 <Scrubber/>
                 <div className="flex justify-center gap-2">
                     { actionMap.map(
-                        ({ msg, panel }) => 
-                            <button onClick={panelChanger(setPanel, panel)}>
+                        ({ msg, panel }, idx) => 
+                            <button key={idx} onClick={() => { setPanel(panel); setIdx(idx) }}>
                                 { msg }
                             </button>
                     )}
