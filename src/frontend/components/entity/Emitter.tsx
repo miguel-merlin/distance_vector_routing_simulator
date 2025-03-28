@@ -4,8 +4,10 @@ import { Group, Rect } from "react-konva";
 import Label from "./util/Label";
 import Highlight from "./util/Highlight";
 import { useState } from "react";
+import { ET_EMIT } from "+/util/typings";
 
 export interface EmitterAttr extends BaseAttr {
+    type: ET_EMIT
     disabled?: boolean
     destination?: uid
 }
@@ -27,9 +29,11 @@ export default function Emitter({ ent }: EntityProp & EntityNetwork) {
 
     return (
         <Group x={x} y={y} listening onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-            <Highlight type="ET_EMIT" size={size} color={highlightClr} visible={hovered}/>
-            <Rect fill={fillClr} stroke={strokeClr} strokeEnabled
-                width={size} height={size}/>
+            <Group offsetX={size/2} offsetY={size/2}>
+                <Highlight type="ET_EMIT" size={size} color={highlightClr} visible={hovered}/>
+                <Rect fill={fillClr} stroke={strokeClr} strokeEnabled
+                    width={size} height={size}/>
+            </Group>
             <Label label={label} color={labelClr} fontFamily={fontFamily} fontSize={fontSize}/>
         </Group>
         

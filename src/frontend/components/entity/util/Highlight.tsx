@@ -28,8 +28,10 @@ function CircleHighlight({ size, color, visible }: ShapeHighlightProps) {
 }
 
 function RectHighlight({ size, color, visible }: ShapeHighlightProps) {
-    const scaled = size + 5
-    return <Rect fill={color} width={scaled} height={scaled} strokeEnabled={false} visible={visible}/>
+    const scaled = size + 10
+    return <Rect fill={color} width={scaled} height={scaled} 
+                strokeEnabled={false} visible={visible}
+                offsetX={5} offsetY={5}/>
 }
 
 export default function Highlight(props: HighlightProps) {
