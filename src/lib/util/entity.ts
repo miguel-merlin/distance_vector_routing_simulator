@@ -22,6 +22,12 @@ export class Entity {
         return fillWithDefaults(e, e.getType())
     }
 
+    static lookup(entMap: EntityMap, uid: uid): Entity {
+        if(entMap.has(uid))
+            return entMap.get(uid) as Entity
+        throw new Error(`Entity ${uid} does not exist in map.`)
+    }
+
     /** Use static method of<T>() for better type safety */
     constructor(e: unknown) {
         this.ent = e
