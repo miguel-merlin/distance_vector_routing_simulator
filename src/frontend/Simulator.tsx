@@ -4,7 +4,7 @@ import Node from "./components/entity/Node"
 import Edge, { EdgeEntity } from "./components/entity/Edge"
 import { useMemo } from 'react'
 import Network from '+/interfaces/Network'
-import Emitter, { EmitterEntity } from './components/entity/Emitter'
+import Emitter from './components/entity/Emitter'
 
 interface SimulatorProps {
     env: EntityMap
@@ -31,15 +31,6 @@ export function Simulator({ env }: SimulatorProps) {
         return { layers: sortedEnts, network }
     }, [env])
 
-    const test = Entity.of<EmitterEntity>({
-        type: "ET_EMIT",
-        id: "T1",
-        name: "T",
-        x: 50,
-        y: 50,
-        size: 50
-    })
-
     return (
         <Stage width={500} height={500}>
             <EntityContext value={env}>
@@ -47,7 +38,6 @@ export function Simulator({ env }: SimulatorProps) {
                     { layers.links.map((e, idx) => <Edge key={idx} ent={e}/>) }
                 </Layer>
                 <Layer>
-                    { <Emitter ent={test} network={network}/> }
                     { layers.nodelike.map((e, idx) => e.is("ET_NODE")
                         ? <Node key={idx} ent={e}/>
                         : <Emitter key={idx} ent={e} network={network}/>
