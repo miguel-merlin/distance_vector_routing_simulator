@@ -8,9 +8,60 @@ import Emitter from './components/entity/Emitter'
 import Environment from './components/entity/util/Environment'
 import { generateTrack, getPacketColor, Packet } from '+/util/packet'
 import PacketManager from './components/entity/util/PacketManager'
+import { EventHandler, EventQueue } from '+/util/sim-event'
+import { RRefHook } from '+/util/react-aliases'
 
 interface SimulatorProps {
     env: EntityMap
+}
+
+function evHandler(env: EntityMap, packets: RRefHook<Packet[]>) : EventHandler {
+    return (queue: EventQueue, t: number) => {
+        for(const q of queue) {
+            switch(q.ty) {
+                case "EV_MK_PACKET":
+                    const { source, dest, path } = q.data
+                    const cp = path.shift()
+                    if(!cp) throw Error("Packet Checkpoint is undefined")
+                    const { track, doneAt } = generateTrack(env, t, cp, path[0])
+                    const color = getPacketColor(env, source)
+
+                    packets.current.push({
+                        color: color,
+                        size: 5,
+                        track: track,
+                        doneAt: doneAt,
+                        source: source,
+                        checkpoint: cp,
+                        dest: dest,
+                        path: path
+                    })
+                    break
+                case "EV_UPDATE_PACKETS":
+                    packets.current = packets.current.map((p) => {
+                        const cp = p.path.shift()
+                        if(!cp) throw Error("Packet Checkpoint is undefined")
+                        return {
+                            ...p,
+                            checkpoint: cp,
+                            path: p.path
+                        }
+                    })
+                    .filter(({ checkpoint, dest }) => checkpoint != dest)
+                    .map((p) => {
+                        const { checkpoint, path } = p
+                        const { track, doneAt } = generateTrack(env, t, checkpoint, path[0])
+                        return {
+                            ...p,
+                            track: track,
+                            doneAt: doneAt
+                        }
+                    })
+                    break
+            }
+        }
+        return [{ ty: "EV_UPDATE_PACKETS", data: {} }]
+    }
 }
 
 export function Simulator({ env }: SimulatorProps) {
@@ -38,53 +89,7 @@ export function Simulator({ env }: SimulatorProps) {
 
     return (
         <Stage width={500} height={500}>
-            <Environment paused={true} entMap={env} 
-                eventHandler={(queue, t) => {
-                    for(const q of queue) {
-                        switch(q.ty) {
-                            case "EV_MK_PACKET":
-                                const { source, dest, path } = q.data
-                                const cp = path.shift()
-                                if(!cp) throw Error("Packet Checkpoint is undefined")
-                                const { track, doneAt } = generateTrack(env, t, cp, path[0])
-                                const color = getPacketColor(env, source)
-
-                                packets.current.push({
-                                    color: color,
-                                    size: 5,
-                                    track: track,
-                                    doneAt: doneAt,
-                                    source: source,
-                                    checkpoint: cp,
-                                    dest: dest,
-                                    path: path
-                                })
-                                break
-                            case "EV_UPDATE_PACKETS":
-                                packets.current = packets.current.map((p) => {
-                                    const cp = p.path.shift()
-                                    if(!cp) throw Error("Packet Checkpoint is undefined")
-                                    return {
-                                        ...p,
-                                        checkpoint: cp,
-                                        path: p.path
-                                    }
-                                })
-                                .filter(({ checkpoint, dest }) => checkpoint != dest)
-                                .map((p) => {
-                                    const { checkpoint, path } = p
-                                    const { track, doneAt } = generateTrack(env, t, checkpoint, path[0])
-                                    return {
-                                        ...p,
-                                        track: track,
-                                        doneAt: doneAt
-                                    }
-                                })
-                                break
-                        }
-                    }
-                    return [{ ty: "EV_UPDATE_PACKETS", data: {} }]
-                }}>
+            <Environment paused={true} entMap={env} eventHandler={evHandler(env, packets)}>
                 <Layer>
                     { layers.links.map((e, idx) => <Edge key={idx} ent={e}/>) }
                 </Layer>
