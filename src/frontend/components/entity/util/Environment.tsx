@@ -21,7 +21,7 @@ export default function Environment({ paused, entMap, eventHandler, children }: 
                 eventRefs.current = res
                 setT(t + 1)
             }
-        }, 1)
+        }, 1000)
     }, [t])
 
     return (
