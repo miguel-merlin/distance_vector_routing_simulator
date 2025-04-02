@@ -1,5 +1,7 @@
 import { Vector2d } from "konva/lib/types"
 import { PacketProp } from "@/components/entity/util/Packet"
+import { EntityMap, uid } from "./entity"
+import { ColorAttr, PositionAttr } from "./attributes"
 
 type TravelInfo = { velocity: Vector2d, duration: number }
 export type PFunc = (t: number) => { done: boolean, pos: Vector2d }
@@ -21,7 +23,7 @@ function getTravelInfo(p: Vector2d, q: Vector2d, s: number) : TravelInfo {
     }
 }
 
-export function generateTrack(tstamp: number, start: Vector2d, dest: Vector2d, speed: number) {
+function getTrack(tstamp: number, start: Vector2d, dest: Vector2d, speed: number) {
     const { x, y } = start
     const bornAt = tstamp
     const { velocity, duration } = getTravelInfo(start, dest, speed)
@@ -42,6 +44,22 @@ export function generateTrack(tstamp: number, start: Vector2d, dest: Vector2d, s
                 }
             }
         },
-        TTL: TTL
+        doneAt: TTL
     }
+}
+
+export function generateTrack(env: EntityMap, t: number, startId: uid, destId: uid) {
+    const e1 = env.get(startId), e2 = env.get(destId);
+    if(!e1 || !e2)
+        throw new Error("Packet anchors undefined")
+    const p1 = e1.getAttr<PositionAttr>()
+    const p2 = e2.getAttr<PositionAttr>()
+    return getTrack(t, p1, p2, 5)
+}
+
+export function getPacketColor(env: EntityMap, source: uid) {
+    const e = env.get(source)
+    if(!e) throw new Error("Packet Source is undefined")
+    const { fillClr } = e.getAttrReq<ColorAttr>()
+    return fillClr
 }

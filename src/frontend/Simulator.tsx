@@ -6,8 +6,7 @@ import { useMemo, useRef } from 'react'
 import Network from '+/interfaces/Network'
 import Emitter from './components/entity/Emitter'
 import Environment from './components/entity/util/Environment'
-import { generateTrack, Packet } from '+/util/packet'
-import { ColorAttr, PositionAttr } from '+/util/attributes'
+import { generateTrack, getPacketColor, Packet } from '+/util/packet'
 import PacketManager from './components/entity/util/PacketManager'
 
 interface SimulatorProps {
@@ -44,26 +43,47 @@ export function Simulator({ env }: SimulatorProps) {
                     for(const q of queue) {
                         switch(q.ty) {
                             case "EV_MK_PACKET":
-                                const e1 = env.get(q.data.from), e2 = env.get(q.data.to)
-                                if(!e1 || !e2)
-                                    throw new Error("Packet anchors undefined")
-                                const start = e1.getAttr<PositionAttr>()
-                                const dest = e2.getAttr<PositionAttr>()
-                                const { track, TTL } = generateTrack(t, start, dest, 5)
+                                const { source, dest, path } = q.data
+                                const cp = path.shift()
+                                if(!cp) throw Error("Packet Checkpoint is undefined")
+                                const { track, doneAt } = generateTrack(env, t, cp, path[0])
+                                const color = getPacketColor(env, source)
 
-                                const { fillClr } = e1.getAttrReq<ColorAttr>()
                                 packets.current.push({
-                                    color: fillClr,
-                                    size: 10,
+                                    color: color,
+                                    size: 5,
                                     track: track,
-                                    TTL: TTL
+                                    doneAt: doneAt,
+                                    source: source,
+                                    checkpoint: cp,
+                                    dest: dest,
+                                    path: path
                                 })
-                                break;
-                            case "EV_CULL_PACKETS":
-                                packets.current = packets.current.filter(({ TTL }) => TTL > t)
+                                break
+                            case "EV_UPDATE_PACKETS":
+                                packets.current = packets.current.map((p) => {
+                                    const cp = p.path.shift()
+                                    if(!cp) throw Error("Packet Checkpoint is undefined")
+                                    return {
+                                        ...p,
+                                        checkpoint: cp,
+                                        path: p.path
+                                    }
+                                })
+                                .filter(({ checkpoint, dest }) => checkpoint != dest)
+                                .map((p) => {
+                                    const { checkpoint, path } = p
+                                    const { track, doneAt } = generateTrack(env, t, checkpoint, path[0])
+                                    return {
+                                        ...p,
+                                        track: track,
+                                        doneAt: doneAt
+                                    }
+                                })
+                                break
                         }
                     }
-                    return [{ ty: "EV_CULL_PACKETS", data: {} }]
+                    return [{ ty: "EV_UPDATE_PACKETS", data: {} }]
                 }}>
                 <Layer>
                     { layers.links.map((e, idx) => <Edge key={idx} ent={e}/>) }

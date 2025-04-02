@@ -1,20 +1,21 @@
 import { uid } from "./entity"
-import { EV_CULL_PACKETS, EV_MK_PACKET } from "./typings"
+import { EV_UPDATE_PACKETS, EV_MK_PACKET } from "./typings"
 
 export interface MakePacketEvent {
     ty: EV_MK_PACKET
     data: {
-        from: uid
-        to: uid
+        source: uid
+        dest: uid
+        path: uid[]
     }
 }
 
-export interface CullPacketsEvent {
-    ty: EV_CULL_PACKETS,
+export interface UpdatePacketsEvent {
+    ty: EV_UPDATE_PACKETS,
     data: {}
 }
 
 export type Event = 
-    MakePacketEvent | CullPacketsEvent
+    MakePacketEvent | UpdatePacketsEvent
 export type EventQueue = Event[]
 export type EventHandler = (queue: EventQueue, t: number) => EventQueue
