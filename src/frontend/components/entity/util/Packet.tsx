@@ -6,6 +6,7 @@ export interface PacketProp {
     size: number
     t: number
     track: PFunc
+    TTL: number
 }
 
 export default function Packet({ color, size, t, track }: PacketProp) {
