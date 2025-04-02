@@ -1,4 +1,3 @@
-import { createContext } from "react"
 import { BaseAttr } from "./attributes"
 import { ET } from "./typings"
 import { fillWithDefaults } from "./_default"
@@ -53,5 +52,3 @@ export class Entity {
         return (this.ent as Required<F>)
     }
 }
-
-export const EntityContext: React.Context<EntityMap> = createContext(new Map())
