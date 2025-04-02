@@ -19,3 +19,8 @@ export type CTRL =
 export type CTRL_ADDNODE = "CTRL_ADDNODE"
 export type CTRL_ADDEDGE = "CTRL_ADDEDGE"
 export type CTRL_DELETE = "CTRL_DELETE"
+
+/** EVENTS */
+export type EV =
+    EV_MK_PACKET
+export type EV_MK_PACKET = "EV_MK_PACKET"
