@@ -1,15 +1,16 @@
 import { BaseAttr, ColorAttr, LabelAttr, PositionAttr, ShapeAttr } from "+/util/attributes";
-import { BaseEntity, EntityNetwork, EntityProp, uid } from "+/util/entity";
+import { BaseEntity, EntityNetwork, EntityProp } from "+/util/entity";
 import { Group, Rect } from "react-konva";
 import Label from "./util/Label";
 import Highlight from "./util/Highlight";
-import { useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import { ET_EMIT } from "+/util/typings";
+import { EntityContext, EventContext, TimeContext } from "+/util/contexts";
 
 export interface EmitterAttr extends BaseAttr {
     type: ET_EMIT
+    spawnRate: number
     disabled?: boolean
-    destination?: uid
 }
 
 export type EmitterEntity = BaseEntity
@@ -19,13 +20,43 @@ export type EmitterEntity = BaseEntity
     & ColorAttr
     & LabelAttr
 
-export default function Emitter({ ent }: EntityProp & EntityNetwork) {
+export default function Emitter({ ent, network }: EntityProp & EntityNetwork) {
+    const { spawnRate, disabled, id } = ent.getAs<EmitterEntity>()
+
+    const t = useContext(TimeContext)
+    const queue = useContext(EventContext)
+    const env = useContext(EntityContext)
     const [hovered, setHovered] = useState(false)
+    const targets = useMemo(() => {
+        const nodelike = []
+        for(const e of env.values()) {
+            const eid = e.getAs().id
+            if(eid != id && (e.is("ET_NODE") || e.is("ET_EMIT")))
+                nodelike.push(id)
+        }
+        return nodelike
+    }, [env])
 
     const { x, y } = ent.getAttr<PositionAttr>()
     const { size } = ent.getAttrReq<ShapeAttr>()
     const { fillClr, highlightClr, strokeClr, labelClr } = ent.getAttrReq<ColorAttr>()
     const { label, fontFamily, fontSize } = ent.getAttrReq<LabelAttr>()
+
+    if(!disabled && t % spawnRate === 0) {
+        const destId = targets[Math.floor(Math.random() * targets.length)]
+        const path = network.getShortestPath(id, destId)
+
+        if(path) {
+            queue.current.push({
+                ty: "EV_MK_PACKET",
+                data: {
+                    source: id,
+                    dest: destId,
+                    path: path.path
+                }
+            })
+        }
+    }
 
     return (
         <Group x={x} y={y} listening onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
