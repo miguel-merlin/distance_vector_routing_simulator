@@ -59,9 +59,11 @@ export function Simulator({ env }: SimulatorProps) {
                                     TTL: TTL
                                 })
                                 break;
+                            case "EV_CULL_PACKETS":
+                                packets.current = packets.current.filter(({ TTL }) => TTL > t)
                         }
                     }
-                    return queue
+                    return [{ ty: "EV_CULL_PACKETS", data: {} }]
                 }}>
                 <Layer>
                     { layers.links.map((e, idx) => <Edge key={idx} ent={e}/>) }
