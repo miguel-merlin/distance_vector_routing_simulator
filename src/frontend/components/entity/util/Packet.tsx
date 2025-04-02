@@ -1,3 +1,4 @@
+import { uid } from "+/util/entity"
 import { PFunc } from "+/util/packet"
 import { Rect } from "react-konva"
 
@@ -6,7 +7,11 @@ export interface PacketProp {
     size: number
     t: number
     track: PFunc
-    TTL: number
+    doneAt: number
+    path: uid[]
+    source: uid
+    checkpoint: uid
+    dest: uid
 }
 
 export default function Packet({ color, size, t, track }: PacketProp) {
