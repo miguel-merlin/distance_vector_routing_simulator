@@ -16,7 +16,7 @@ export default function PacketManager({ packets }: PacketManagerProps) {
         <Layer>
             {
                 packets.current.map((info, idx) => 
-                    info.TTL > t 
+                    info.doneAt > t 
                     ? <Packet key={idx} {...info} t={t}/>
                     : <></>
                 )

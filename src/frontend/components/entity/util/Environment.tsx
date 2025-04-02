@@ -27,7 +27,7 @@ export default function Environment({ paused, entMap, eventHandler, children }: 
     return (
         <EntityContext value={entMap}>
             <TimeContext value={t}>
-                <EventContext value={eventRefs}>
+                <EventContext value={eventRefs.current}>
                     { children }
                 </EventContext>
             </TimeContext>

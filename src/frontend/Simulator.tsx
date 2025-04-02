@@ -84,7 +84,6 @@ export function Simulator({ env }: SimulatorProps) {
 
         return { layers: sortedEnts, network }
     }, [env])
-
     const packets = useRef<Packet[]>([])
 
     return (

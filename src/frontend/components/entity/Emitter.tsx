@@ -21,8 +21,6 @@ export type EmitterEntity = BaseEntity
     & LabelAttr
 
 export default function Emitter({ ent, network }: EntityProp & EntityNetwork) {
-    const { spawnRate, disabled, id } = ent.getAs<EmitterEntity>()
-
     const t = useContext(TimeContext)
     const queue = useContext(EventContext)
     const env = useContext(EntityContext)
@@ -31,12 +29,14 @@ export default function Emitter({ ent, network }: EntityProp & EntityNetwork) {
         const nodelike = []
         for(const e of env.values()) {
             const eid = e.getAs().id
+            const id = e.getAs().id
             if(eid != id && (e.is("ET_NODE") || e.is("ET_EMIT")))
                 nodelike.push(id)
         }
         return nodelike
     }, [env])
 
+    const { spawnRate, disabled, id } = ent.getAs<EmitterEntity>()
     const { x, y } = ent.getAttr<PositionAttr>()
     const { size } = ent.getAttrReq<ShapeAttr>()
     const { fillClr, highlightClr, strokeClr, labelClr } = ent.getAttrReq<ColorAttr>()
@@ -47,7 +47,7 @@ export default function Emitter({ ent, network }: EntityProp & EntityNetwork) {
         const path = network.getShortestPath(id, destId)
 
         if(path) {
-            queue.current.push({
+            queue.push({
                 ty: "EV_MK_PACKET",
                 data: {
                     source: id,
