@@ -13,10 +13,12 @@ import { RRefHook } from '+/util/react-aliases'
 
 interface SimulatorProps {
     env: EntityMap
+    paused: boolean
 }
 
 function evHandler(env: EntityMap, packets: RRefHook<Packet[]>) : EventHandler {
     return (queue: EventQueue, t: number) => {
+        console.log(`At ${t}: `, queue)
         for(const q of queue) {
             switch(q.ty) {
                 case "EV_MK_PACKET":
@@ -49,13 +51,17 @@ function evHandler(env: EntityMap, packets: RRefHook<Packet[]>) : EventHandler {
                     })
                     .filter(({ checkpoint, dest }) => checkpoint != dest)
                     .map((p) => {
-                        const { checkpoint, path } = p
-                        const { track, doneAt } = generateTrack(env, t, checkpoint, path[0])
-                        return {
-                            ...p,
-                            track: track,
-                            doneAt: doneAt
-                        }
+                        const { doneAt } = p
+                        if(doneAt >= t) {
+                            const { checkpoint, path } = p
+                            const { track, doneAt: newDoneAt } = generateTrack(env, t, checkpoint, path[0])
+                            return {
+                                ...p,
+                                track: track,
+                                doneAt: newDoneAt
+                            }
+                        } 
+                        return p
                     })
                     break
             }
@@ -64,7 +70,7 @@ function evHandler(env: EntityMap, packets: RRefHook<Packet[]>) : EventHandler {
     }
 }
 
-export function Simulator({ env }: SimulatorProps) {
+export function Simulator({ env, paused }: SimulatorProps) {
     const { layers, network } = useMemo(() => {
         const sortedEnts: { nodelike: Entity[], links: Entity[] } = { nodelike: [], links: [] }
         const network = new Network()
@@ -82,13 +88,14 @@ export function Simulator({ env }: SimulatorProps) {
             network.addLink(eEnt.head, eEnt.tail, eEnt.weight)
         }
 
+        network.runDistanceVectorRouting()
         return { layers: sortedEnts, network }
     }, [env])
     const packets = useRef<Packet[]>([])
 
     return (
         <Stage width={500} height={500}>
-            <Environment paused={true} entMap={env} eventHandler={evHandler(env, packets)}>
+            <Environment paused={paused} entMap={env} eventHandler={evHandler(env, packets)}>
                 <Layer>
                     { layers.links.map((e, idx) => <Edge key={idx} ent={e}/>) }
                 </Layer>
