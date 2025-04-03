@@ -16,6 +16,7 @@ export default function ControlUI({ envState }: ControlUIProps) {
     const actionMap = [
         { msg: "Add Node", panelProps: {inputs, ...ACTION_MAP["CTRL_ADDNODE"](envState)} },
         { msg: "Add Edge", panelProps: {inputs, ...ACTION_MAP["CTRL_ADDEDGE"](envState)} },
+        { msg: "Add Emitter", panelProps: {inputs, ...ACTION_MAP["CTRL_ADDEMIT"](envState)} },
         { msg: "Delete", panelProps: {inputs, ...ACTION_MAP["CTRL_DELETE"](envState)} }
     ]
 
