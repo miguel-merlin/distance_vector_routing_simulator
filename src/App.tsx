@@ -20,7 +20,7 @@ function App() {
     <div className="w-screen h-screen grid content-center place-content-center">
       <div className="flex border-2 w-[750px] h-min">
         <div className="border-r-2">
-          <Simulator env={entMap}/>
+          <Simulator paused={false} env={entMap}/>
         </div>
         <div className="w-[250px] h-[500px]">
           <ControlUI envState={envState}/>

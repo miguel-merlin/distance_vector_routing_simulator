@@ -3,6 +3,8 @@ import { EventHandler, EventQueue } from "+/util/sim-event";
 import { EntityMap } from "+/util/entity";
 import { useEffect, useRef, useState } from "react";
 
+const interval = 1000
+
 export interface EnvironmentProps {
     paused?: boolean
     entMap: EntityMap
@@ -21,7 +23,7 @@ export default function Environment({ paused, entMap, eventHandler, children }: 
                 eventRefs.current = res
                 setT(t + 1)
             }
-        }, 1000)
+        }, interval)
     }, [t])
 
     return (
