@@ -27,11 +27,11 @@ export default function Emitter({ ent, network }: EntityProp & EntityNetwork) {
     const [hovered, setHovered] = useState(false)
     const targets = useMemo(() => {
         const nodelike = []
+        const id = ent.getAs().id
         for(const e of env.values()) {
             const eid = e.getAs().id
-            const id = e.getAs().id
-            if(eid != id && (e.is("ET_NODE") || e.is("ET_EMIT")))
-                nodelike.push(id)
+            if(eid != id && e.is("ET_EMIT"))
+                nodelike.push(eid)
         }
         return nodelike
     }, [env])
@@ -42,8 +42,9 @@ export default function Emitter({ ent, network }: EntityProp & EntityNetwork) {
     const { fillClr, highlightClr, strokeClr, labelClr } = ent.getAttrReq<ColorAttr>()
     const { label, fontFamily, fontSize } = ent.getAttrReq<LabelAttr>()
 
-    if(!disabled && t % spawnRate === 0) {
+    if(!disabled && targets.length >= 1 && t % spawnRate === 0) {
         const destId = targets[Math.floor(Math.random() * targets.length)]
+        console.log(`Emitter ${id} picked dest ${destId}`)
         const path = network.getShortestPath(id, destId)
 
         if(path) {
