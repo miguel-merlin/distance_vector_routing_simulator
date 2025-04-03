@@ -11,15 +11,15 @@ export interface PacketManagerProps {
 
 export default function PacketManager({ packets }: PacketManagerProps) {
     const t = useContext(TimeContext)
-
+    console.log(packets)
     return (
         <Layer>
             {
-                packets.current.map((info, idx) => 
-                    info.doneAt > t 
-                    ? <Packet key={idx} {...info} t={t}/>
-                    : <></>
-                )
+                packets.current
+                    .filter(({doneAt}) => doneAt > t)
+                    .map((info, idx) => 
+                        <Packet key={idx} {...info} t={t}/>
+                    )
             }
         </Layer>
     )
