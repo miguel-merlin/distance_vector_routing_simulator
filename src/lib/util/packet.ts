@@ -16,8 +16,8 @@ function getTravelInfo(p: Vector2d, q: Vector2d, s: number) : TravelInfo {
 
     return {
         velocity: {
-            x: dx / s,
-            y: dy / s
+            x: (dx / d) * s,
+            y: (dy / d) * s
         },
         duration: Math.ceil(d / s)
     }

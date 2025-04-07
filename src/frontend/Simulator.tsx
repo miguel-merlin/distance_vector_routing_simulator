@@ -26,11 +26,11 @@ function evHandler(env: EntityMap, packets: RRefHook<Packet[]>) : EventHandler {
                     const cp = path.shift()
                     if(!cp) throw Error("Packet Checkpoint is undefined")
                     const { track, doneAt } = generateTrack(env, t, cp, path[0])
-                    const color = getPacketColor(env, source)
+                    const color = getPacketColor(env, dest)
 
                     packets.current.push({
                         color: color,
-                        size: 5,
+                        size: 10,
                         track: track,
                         doneAt: doneAt,
                         source: source,
@@ -41,18 +41,22 @@ function evHandler(env: EntityMap, packets: RRefHook<Packet[]>) : EventHandler {
                     break
                 case "EV_UPDATE_PACKETS":
                     packets.current = packets.current.map((p) => {
-                        const cp = p.path.shift()
-                        if(!cp) throw Error("Packet Checkpoint is undefined")
-                        return {
-                            ...p,
-                            checkpoint: cp,
-                            path: p.path
+                        const { doneAt, path } = p 
+                        if(doneAt < t) {
+                            const cp = path.shift()
+                            if(!cp) throw Error("Packet Checkpoint is undefined")
+                            return {
+                                ...p,
+                                checkpoint: cp,
+                                path: p.path
+                            }
                         }
+                        return p
                     })
                     .filter(({ checkpoint, dest }) => checkpoint != dest)
                     .map((p) => {
                         const { doneAt } = p
-                        if(doneAt >= t) {
+                        if(doneAt < t) {
                             const { checkpoint, path } = p
                             const { track, doneAt: newDoneAt } = generateTrack(env, t, checkpoint, path[0])
                             return {

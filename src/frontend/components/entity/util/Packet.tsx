@@ -23,6 +23,8 @@ export default function Packet({ color, size, t, track }: PacketProp) {
             strokeWidth={2} 
             offsetX={size / 2}
             offsetY={size / 2}
+            width={size}
+            height={size}
             x={pos.x}
             y={pos.y} />
     )
