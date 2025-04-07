@@ -92,6 +92,7 @@ class Network {
 
 export default Network;
 
+/*
 const network = new Network();
 
 network.addNode("A");
@@ -120,3 +121,4 @@ if (result) {
 } else {
   console.log(`No path found from ${source} to ${destination}.`);
 }
+*/
