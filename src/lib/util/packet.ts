@@ -54,7 +54,7 @@ export function generateTrack(env: EntityMap, t: number, startId: uid, destId: u
         throw new Error("Packet anchors undefined")
     const p1 = e1.getAttr<PositionAttr>()
     const p2 = e2.getAttr<PositionAttr>()
-    return getTrack(t, p1, p2, 5)
+    return getTrack(t, p1, p2, 15)
 }
 
 export function getPacketColor(env: EntityMap, source: uid) {
