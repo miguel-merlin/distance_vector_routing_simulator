@@ -44,7 +44,7 @@ export default function Emitter({ ent, network }: EntityProp & EntityNetwork) {
 
     if(!disabled && targets.length >= 1 && t % spawnRate === 0) {
         const destId = targets[Math.floor(Math.random() * targets.length)]
-        console.log(`Emitter ${id} picked dest ${destId}`)
+        console.log(`${t}: Emitter ${id} picked destination ${destId}`)
         const path = network.getShortestPath(id, destId)
 
         if(path) {

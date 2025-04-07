@@ -11,7 +11,6 @@ export interface PacketManagerProps {
 
 export default function PacketManager({ packets }: PacketManagerProps) {
     const t = useContext(TimeContext)
-    console.log(packets)
     return (
         <Layer>
             {

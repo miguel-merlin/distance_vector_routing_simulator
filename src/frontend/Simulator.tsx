@@ -18,7 +18,6 @@ interface SimulatorProps {
 
 function evHandler(env: EntityMap, packets: RRefHook<Packet[]>) : EventHandler {
     return (queue: EventQueue, t: number) => {
-        console.log(`At ${t}: `, queue)
         for(const q of queue) {
             switch(q.ty) {
                 case "EV_MK_PACKET":
