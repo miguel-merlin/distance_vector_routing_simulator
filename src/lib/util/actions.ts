@@ -4,6 +4,7 @@ import { NodeEntity } from "@/components/entity/Node";
 import { Entity, EntityMap, uid } from "./entity";
 import { RStateHook } from "./react-aliases";
 import { CTRL } from "./typings";
+import { EmitterEntity } from "@/components/entity/Emitter";
 
 type StatelessPanelProp = Omit<PanelProps, "inputs">
 type ActionMap = Record<CTRL, (envState: RStateHook<EntityMap>) => StatelessPanelProp>
@@ -44,16 +45,41 @@ export const ACTION_MAP: ActionMap = {
         fields: [
             { key: "id", type: "string" },
             { key: "head", label: "Head Id", type: "string" },
-            { key: "tail", label: "Tail Id", type: "string" }
+            { key: "tail", label: "Tail Id", type: "string" },
+            { key: "weight", type: "number" }
         ],
-        onSubmit: ({ id, head, tail }) => {
+        onSubmit: ({ id, head, tail, weight }) => {
             const uid = id as uid
             const ent = Entity.of<EdgeEntity>({
                 type: "ET_EDGE",
                 id: uid,
                 name: uid,
+                weight: weight as number,
                 head: head as uid,
                 tail: tail as uid
+            })
+            saveEntity(envState, uid, ent)
+        }
+    }),
+
+    CTRL_ADDEMIT: (envState) => ({
+        fields: [
+            { key: "id", type: "string" },
+            { key: "name", type: "string" },
+            { key: "x", type: "number" },
+            { key: "y", type: "number" },
+            { key: "spawnRate", type: "number" }
+        ],
+        onSubmit: ({ id, name, x, y, spawnRate }) => {
+            const uid = id as uid
+            const ent = Entity.of<EmitterEntity>({
+                type: "ET_EMIT",
+                id: uid,
+                name: name as string,
+                x: x as number,
+                y: y as number,
+                size: 50,
+                spawnRate: spawnRate as number
             })
             saveEntity(envState, uid, ent)
         }

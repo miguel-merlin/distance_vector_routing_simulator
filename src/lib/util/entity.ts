@@ -1,11 +1,12 @@
-import { createContext } from "react"
 import { BaseAttr } from "./attributes"
 import { ET } from "./typings"
 import { fillWithDefaults } from "./_default"
+import Network from "+/interfaces/Network"
 
 export type uid = string
 export type EntityMap = Map<uid, Entity>
 export type EntityProp = { ent: Entity }
+export type EntityNetwork = { network: Network }
 
 export interface BaseEntity {
     id: uid
@@ -18,6 +19,12 @@ export class Entity {
     static of<T extends BaseEntity>(ent: T): Entity {
         const e = new Entity(ent);
         return fillWithDefaults(e, e.getType())
+    }
+
+    static lookup(entMap: EntityMap, uid: uid): Entity {
+        if(entMap.has(uid))
+            return entMap.get(uid) as Entity
+        throw new Error(`Entity ${uid} does not exist in map.`)
     }
 
     /** Use static method of<T>() for better type safety */
@@ -45,5 +52,3 @@ export class Entity {
         return (this.ent as Required<F>)
     }
 }
-
-export const EntityContext: React.Context<EntityMap> = createContext(new Map())

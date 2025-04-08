@@ -9,14 +9,15 @@ type DefaultMap = Record<string, Resolver>
 
 const attrMaps: Record<ET, ATR[]> = {
     ET_NODE: ["ATR_COLOR", "ATR_LABEL"],
-    ET_EDGE: ["ATR_COLOR"]
+    ET_EDGE: ["ATR_COLOR"],
+    ET_EMIT: ["ATR_COLOR", "ATR_LABEL"]
 }
 
 const defaultResolvers: Record<ATR, DefaultMap> = {
     ATR_COLOR: {
-        fillClr: (_: Entity) => Util.getRandomColor(),
+        fillClr: (e: Entity) => e.is("ET_EMIT") ? Util.getRandomColor() : "lightgrey",
         strokeClr: 'black',
-        highlightClr: (e: Entity) => e.is("ET_EDGE") ? "yellow" : (e.getAttr<ColorAttr>().fillClr),
+        highlightClr: (e: Entity) => e.is("ET_EDGE") || e.is("ET_NODE") ? "yellow" : (e.getAttr<ColorAttr>().fillClr),
         labelClr: 'black'
     },
     ATR_LABEL: {
