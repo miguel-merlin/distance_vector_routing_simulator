@@ -1,15 +1,17 @@
-import { useState } from "react"
+import { RStateHook } from "+/util/react-aliases";
 
-export default function Scrubber() {
-    const [isPlaying, setPlaying] = useState<boolean>(false);
+export interface ScrubberProps {
+    pausedState: RStateHook<boolean>
+}
+
+export default function Scrubber({ pausedState }: ScrubberProps) {
+    const [paused, setPaused] = pausedState;
 
     return (
         <div className="flex justify-center gap-2">
-            <button>⏪</button>
-            <button onClick={() => setPlaying(!isPlaying)}>
-                { isPlaying ? "⏸" : "⏵" }
+            <button onClick={() => setPaused(!paused)}>
+                { paused ? "⏵" : "⏸" }
             </button>
-            <button>⏩</button>
         </div>
     )
 }
