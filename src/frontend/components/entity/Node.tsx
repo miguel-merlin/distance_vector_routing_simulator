@@ -4,7 +4,8 @@ import { type PositionAttr, type ColorAttr, type BaseAttr, type LabelAttr, Shape
 import { ET_NODE } from "+/util/typings"
 import Highlight from "./util/Highlight"
 import Label from "./util/Label"
-import { useState } from "react"
+import { useContext, useState } from "react"
+import { ClickContext } from "+/util/contexts"
 
 export interface NodeAttr extends BaseAttr {
     type: ET_NODE
@@ -19,6 +20,7 @@ export type NodeEntity = BaseEntity
 
 export default function Node({ ent }: EntityProp) {
     const [hovered, setHovered] = useState(false)
+    const record = useContext(ClickContext)
 
     const { x, y } = ent.getAttr<PositionAttr>()
     const { fillClr, strokeClr, highlightClr, labelClr } = ent.getAttrReq<ColorAttr>()
@@ -26,7 +28,10 @@ export default function Node({ ent }: EntityProp) {
     const { size } = ent.getAttr<ShapeAttr>()
 
     return (
-        <Group x={x} y={y} listening onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+        <Group x={x} y={y} listening 
+            onMouseEnter={() => setHovered(true)} 
+            onMouseLeave={() => setHovered(false)}
+            onMouseUp={() => record.setTarget(ent)} >
             <Highlight type="ET_NODE" color={highlightClr} size={size} visible={hovered}/>
             <Circle fill={fillClr} stroke={strokeClr} radius={size} strokeEnabled/>
             <Label label={label} color={labelClr} fontFamily={fontFamily} fontSize={fontSize}/>

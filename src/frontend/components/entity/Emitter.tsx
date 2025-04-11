@@ -5,7 +5,7 @@ import Label from "./util/Label";
 import Highlight from "./util/Highlight";
 import { useContext, useMemo, useState } from "react";
 import { ET_EMIT } from "+/util/typings";
-import { EntityContext, EventContext, TimeContext } from "+/util/contexts";
+import { ClickContext, EntityContext, EventContext, TimeContext } from "+/util/contexts";
 
 export interface EmitterAttr extends BaseAttr {
     type: ET_EMIT
@@ -24,6 +24,7 @@ export default function Emitter({ ent, network }: EntityProp & EntityNetwork) {
     const t = useContext(TimeContext)
     const queue = useContext(EventContext)
     const env = useContext(EntityContext)
+    const record = useContext(ClickContext)
     const [hovered, setHovered] = useState(false)
     const targets = useMemo(() => {
         const nodelike = []
@@ -60,7 +61,10 @@ export default function Emitter({ ent, network }: EntityProp & EntityNetwork) {
     }
 
     return (
-        <Group x={x} y={y} listening onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+        <Group x={x} y={y} listening 
+            onMouseEnter={() => setHovered(true)} 
+            onMouseLeave={() => setHovered(false)}
+            onMouseUp={() => record.setTarget(ent)}>
             <Group offsetX={size/2} offsetY={size/2}>
                 <Highlight type="ET_EMIT" size={size} color={highlightClr} visible={hovered}/>
                 <Rect fill={fillClr} stroke={strokeClr} strokeEnabled

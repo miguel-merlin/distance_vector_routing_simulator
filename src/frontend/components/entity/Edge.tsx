@@ -4,7 +4,7 @@ import { type uid, BaseEntity, Entity, EntityProp } from "+/util/entity"
 import { type PositionAttr, type BaseAttr, type ColorAttr } from "+/util/attributes"
 import { ET_EDGE } from "+/util/typings"
 import Highlight from "./util/Highlight"
-import { EntityContext } from "+/util/contexts"
+import { ClickContext, EntityContext } from "+/util/contexts"
 
 export interface EdgeAttr extends BaseAttr {
     type: ET_EDGE
@@ -21,6 +21,8 @@ export type EdgeEntity = BaseEntity
 export default function Edge({ ent }: EntityProp) {
     const [hovered, setHovered] = useState(false)
     const map = useContext(EntityContext)
+    const record = useContext(ClickContext)
+
     const { head, tail } = ent.getAttr<EdgeAttr>();
 
     const hEnt = Entity.lookup(map, head)
@@ -33,7 +35,9 @@ export default function Edge({ ent }: EntityProp) {
     const { strokeClr, highlightClr } = ent.getAttrReq<ColorAttr>();
 
     return (
-        <Group onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+        <Group onMouseEnter={() => setHovered(true)} 
+            onMouseLeave={() => setHovered(false)}
+            onMouseUp={() => record.setTarget(ent)}>
             <Highlight type="ET_EDGE" color={highlightClr} points={points} visible={hovered}/>
             <Line points={points} stroke={strokeClr}/>
         </Group>
