@@ -4,9 +4,10 @@ import { useContext, useRef, useState } from "react";
 
 export interface PositionTTProps {
     target: RRefHook<HTMLInputElement | null>
+    trigger: (s: string) => void
 }
 
-export default function PositionTT({ target }: PositionTTProps) {
+export default function PositionTT({ target, trigger }: PositionTTProps) {
     const record = useContext(ClickContext)
     const [active, setActive] = useState(false)
     const abortRef = useRef<AbortController | null>(null)
@@ -25,7 +26,9 @@ export default function PositionTT({ target }: PositionTTProps) {
                         const r = await res
                         const pos = r.getPosition()
                         if(target.current && pos) {
-                            target.current.value = `(${pos.x}, ${pos.y})`
+                            const v = `(${Math.floor(pos.x)}, ${Math.floor(pos.y)})`
+                            target.current.value = `(${Math.floor(pos.x)}, ${Math.floor(pos.y)})`
+                            trigger(v)
                         }
                         setActive(false)
                     } catch(e) {

@@ -4,9 +4,10 @@ import { useContext, useRef, useState } from "react";
 
 export interface IdTTProps {
     target: RRefHook<HTMLInputElement | null>
+    trigger: (s: string) => void
 }
 
-export default function IdTT({ target }: IdTTProps) {
+export default function IdTT({ target, trigger }: IdTTProps) {
     const record = useContext(ClickContext)
         const [active, setActive] = useState(false)
         const abortRef = useRef<AbortController | null>(null)
@@ -25,7 +26,9 @@ export default function IdTT({ target }: IdTTProps) {
                             const r = await res
                             const ent = r.getTarget()
                             if(target.current && ent) {
-                                target.current.value = ent.getAs().id
+                                const v = ent.getAs().id
+                                target.current.value = v
+                                trigger(v)
                             }
                             setActive(false)
                         } catch(e) {

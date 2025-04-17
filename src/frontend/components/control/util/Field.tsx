@@ -20,12 +20,13 @@ function setRef(ref: RRefHook<RawInputContainer>, k: string, v: string) {
     ref.current = {...ref.current, [k]: v}
 }
 
-function getTT(type: FieldType, ref: RRefHook<HTMLInputElement | null>): ReactNode {
+function getTT(type: FieldType, ref: RRefHook<HTMLInputElement | null>, inputs: RRefHook<RawInputContainer>, k: string): ReactNode {
+    const trigger = (v: string) => setRef(inputs, k, v)
     switch(type) {
         case "id":
-            return <IdTT target={ref}/>
+            return <IdTT target={ref} trigger={trigger}/>
         case "vector":
-            return <PositionTT target={ref}/>
+            return <PositionTT target={ref} trigger={trigger}/>
         default:
             return <></>
     }
@@ -33,7 +34,7 @@ function getTT(type: FieldType, ref: RRefHook<HTMLInputElement | null>): ReactNo
 
 export default function Field({ name, type, label, inputs }: FieldProps) {
     const inpRef = useRef<HTMLInputElement | null>(null)
-    const tt = useMemo(() => getTT(type, inpRef), [type, inpRef])
+    const tt = useMemo(() => getTT(type, inpRef, inputs, name), [type, inpRef, inputs, name])
     
     return (
         <div>
