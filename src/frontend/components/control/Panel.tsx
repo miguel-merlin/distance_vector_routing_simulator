@@ -2,7 +2,7 @@ import Field, { RawInputContainer } from "./util/Field"
 import { RRefHook } from "+/util/react-aliases"
 import { Vector2d } from "konva/lib/types"
 
-type FieldType = "number" | "string" | "vector" | "id"
+export type FieldType = "number" | "string" | "vector" | "id"
 type FieldValue = number | string | Vector2d
 type FieldConf = { key: string, label?: string, type: FieldType }
 type InputContainer = Record<string, FieldValue>
@@ -45,8 +45,8 @@ export default function Panel({ inputs, fields, onSubmit }: PanelProps) {
                     .reduce((p, c) => ({...p, ...c}))
                 onSubmit(inp)
             }}>
-            { fields.map(({ label, key }, idx) => 
-                <Field key={idx} name={key} label={label || key} inputs={inputs}/>)
+            { fields.map(({ label, key, type }, idx) => 
+                <Field key={idx} name={key} type={type} label={label || key} inputs={inputs}/>)
             }
             
             <button>Submit</button>
