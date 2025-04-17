@@ -2,7 +2,7 @@ import { Stage, Layer } from 'react-konva'
 import { type EntityMap, BaseEntity, Entity } from "+/util/entity"
 import Node from "./components/entity/Node"
 import Edge, { EdgeEntity } from "./components/entity/Edge"
-import { useMemo, useRef } from 'react'
+import { useContext, useMemo, useRef } from 'react'
 import Network from '+/interfaces/Network'
 import Emitter from './components/entity/Emitter'
 import Environment from './components/entity/util/Environment'
@@ -10,6 +10,7 @@ import { generateTrack, getPacketColor, Packet } from '+/util/packet'
 import PacketManager from './components/entity/util/PacketManager'
 import { EventHandler, EventQueue } from '+/util/sim-event'
 import { RRefHook } from '+/util/react-aliases'
+import { ClickContext } from '+/util/contexts'
 
 interface SimulatorProps {
     env: EntityMap
@@ -74,6 +75,7 @@ function evHandler(env: EntityMap, packets: RRefHook<Packet[]>) : EventHandler {
 }
 
 export function Simulator({ env, paused }: SimulatorProps) {
+    const record = useContext(ClickContext)
     const { layers, network } = useMemo(() => {
         const sortedEnts: { nodelike: Entity[], links: Entity[] } = { nodelike: [], links: [] }
         const network = new Network()
@@ -97,7 +99,14 @@ export function Simulator({ env, paused }: SimulatorProps) {
     const packets = useRef<Packet[]>([])
 
     return (
-        <Stage width={500} height={500}>
+        <Stage width={500} height={500}
+            onMouseUp={({ target }) => {
+                const pos = target.getRelativePointerPosition()
+                if(pos) {
+                    record.setPosition(pos)
+                    record.fireUpdate()
+                }
+            }}>
             <Environment paused={paused} entMap={env} eventHandler={evHandler(env, packets)}>
                 <Layer>
                     { layers.links.map((e, idx) => <Edge key={idx} ent={e}/>) }

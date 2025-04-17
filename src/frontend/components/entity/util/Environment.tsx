@@ -24,7 +24,7 @@ export default function Environment({ paused, entMap, eventHandler, children }: 
                 setT(t + 1)
             }
         }, interval)
-    }, [t])
+    }, [t, paused])
 
     return (
         <EntityContext value={entMap}>

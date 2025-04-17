@@ -3,8 +3,9 @@ import { EdgeEntity } from "@/components/entity/Edge";
 import { NodeEntity } from "@/components/entity/Node";
 import { Entity, EntityMap, uid } from "./entity";
 import { RStateHook } from "./react-aliases";
-import { CTRL } from "./typings";
+import { CTRL, ET } from "./typings";
 import { EmitterEntity } from "@/components/entity/Emitter";
+import { Vector2d } from "konva/lib/types";
 
 type StatelessPanelProp = Omit<PanelProps, "inputs">
 type ActionMap = Record<CTRL, (envState: RStateHook<EntityMap>) => StatelessPanelProp>
@@ -19,22 +20,26 @@ function saveEntity(envState: RStateHook<EntityMap>, uid: uid, ent: Entity | nul
     setter(new Map(ents.entries()))
 }
 
+function generateId(type: ET) {
+    const tstamp = Date.now()
+    return `${type}-${tstamp}`
+}
+
 export const ACTION_MAP: ActionMap = {
     CTRL_ADDNODE: (envState) => ({
         fields: [
-            { key: "id", type: "string" },
             { key: "name", type: "string" },
-            { key: "x", type: "number" },
-            { key: "y", type: "number" }
+            { key: "position", type: "vector" },
         ],
-        onSubmit: ({ id, name, x, y }) => {
-            const uid = id as uid
+        onSubmit: ({ name, position }) => {
+            const uid = generateId("ET_NODE")
+            const { x, y } = position as Vector2d
             const ent = Entity.of<NodeEntity>({
                 type: "ET_NODE",
                 id: uid,
                 name: name as string,
-                x: x as number,
-                y: y as number,
+                x: x,
+                y: y,
                 size: 25
             })
             saveEntity(envState, uid, ent)
@@ -43,13 +48,12 @@ export const ACTION_MAP: ActionMap = {
 
     CTRL_ADDEDGE: (envState) => ({
         fields: [
-            { key: "id", type: "string" },
-            { key: "head", label: "Head Id", type: "string" },
-            { key: "tail", label: "Tail Id", type: "string" },
+            { key: "head", label: "Head Id", type: "id" },
+            { key: "tail", label: "Tail Id", type: "id" },
             { key: "weight", type: "number" }
         ],
-        onSubmit: ({ id, head, tail, weight }) => {
-            const uid = id as uid
+        onSubmit: ({ head, tail, weight }) => {
+            const uid = generateId("ET_EDGE")
             const ent = Entity.of<EdgeEntity>({
                 type: "ET_EDGE",
                 id: uid,
@@ -64,20 +68,19 @@ export const ACTION_MAP: ActionMap = {
 
     CTRL_ADDEMIT: (envState) => ({
         fields: [
-            { key: "id", type: "string" },
             { key: "name", type: "string" },
-            { key: "x", type: "number" },
-            { key: "y", type: "number" },
+            { key: "position", type: "vector" },
             { key: "spawnRate", type: "number" }
         ],
-        onSubmit: ({ id, name, x, y, spawnRate }) => {
-            const uid = id as uid
+        onSubmit: ({ name, position, spawnRate }) => {
+            const uid = generateId("ET_EMIT")
+            const { x, y } = position as Vector2d
             const ent = Entity.of<EmitterEntity>({
                 type: "ET_EMIT",
                 id: uid,
                 name: name as string,
-                x: x as number,
-                y: y as number,
+                x: x,
+                y: y,
                 size: 50,
                 spawnRate: spawnRate as number
             })
@@ -87,7 +90,7 @@ export const ACTION_MAP: ActionMap = {
 
     CTRL_DELETE: (envState) => ({
         fields: [
-            { key: "id", type: "string" }
+            { key: "id", type: "id" }
         ],
         onSubmit: ({ id }) => {
             const uid = id as uid

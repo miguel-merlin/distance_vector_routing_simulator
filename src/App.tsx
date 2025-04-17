@@ -13,17 +13,19 @@ function App() {
     ["R1", Entity.of<NodeEntity>({type: "ET_NODE", id: "R1", name: "R1", x: 150, y: 250, size: 25})],
     ["e1", Entity.of<EdgeEntity>({type: "ET_EDGE", id: "e1", name: "e1", head: "A", tail: "R1", weight: 2})],
     ["e2", Entity.of<EdgeEntity>({type: "ET_EDGE", id: "e1", name: "e1", head: "R1", tail: "B", weight: 2})]
-  ]))  
+  ]))
+  const pausedState = useState<boolean>(true);
   const [entMap] = envState
+  const [paused] = pausedState
 
   return (
     <div className="w-screen h-screen grid content-center place-content-center">
       <div className="flex border-2 w-[750px] h-min">
         <div className="border-r-2">
-          <Simulator paused={false} env={entMap}/>
+          <Simulator paused={paused} env={entMap}/>
         </div>
         <div className="w-[250px] h-[500px]">
-          <ControlUI envState={envState}/>
+          <ControlUI envState={envState} pausedState={pausedState}/>
         </div>
       </div>
     </div>

@@ -8,9 +8,10 @@ import { RawInputContainer } from "./components/control/util/Field"
 
 export interface ControlUIProps {
     envState: RStateHook<EntityMap>
+    pausedState: RStateHook<boolean>
 }
 
-export default function ControlUI({ envState }: ControlUIProps) {
+export default function ControlUI({ envState, pausedState }: ControlUIProps) {
     const [panel, setPanel] = useState<JSX.Element>(<></>)
     const inputs = useRef<RawInputContainer>({})
     const actionMap = [
@@ -23,7 +24,7 @@ export default function ControlUI({ envState }: ControlUIProps) {
     return (
         <div className="w-full h-full">
             <div className="border-b-2 flex flex-col justify-center p-2 gap-2">
-                <Scrubber/>
+                <Scrubber pausedState={pausedState}/>
                 <div className="flex justify-center gap-2">
                     { actionMap.map(
                         ({ msg, panelProps }, idx) => 
