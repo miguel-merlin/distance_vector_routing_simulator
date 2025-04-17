@@ -102,7 +102,10 @@ export function Simulator({ env, paused }: SimulatorProps) {
         <Stage width={500} height={500}
             onMouseUp={({ target }) => {
                 const pos = target.getRelativePointerPosition()
-                if(pos) record.setPosition(pos)
+                if(pos) {
+                    record.setPosition(pos)
+                    record.fireUpdate()
+                }
             }}>
             <Environment paused={paused} entMap={env} eventHandler={evHandler(env, packets)}>
                 <Layer>
