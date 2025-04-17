@@ -1,6 +1,6 @@
 import { ClickContext } from "+/util/contexts";
 import { RRefHook } from "+/util/react-aliases";
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 
 export interface PositionTTProps {
     target: RRefHook<HTMLInputElement | null>
@@ -9,25 +9,32 @@ export interface PositionTTProps {
 export default function PositionTT({ target }: PositionTTProps) {
     const record = useContext(ClickContext)
     const [active, setActive] = useState(false)
+    const abortRef = useRef<AbortController | null>(null)
 
     return (
         <button onClick={
             async (e) => { 
                 e.preventDefault()
-                setActive(!active)
+                const state = !active
+                setActive(state)
 
-                if(active) {
+                if(state) {
+                    const [res, cancel] = record.waitForUpdate()
+                    abortRef.current = cancel
                     try {
-                        const { pos } = await record.waitForUpdate()
+                        const r = await res
+                        const pos = r.getPosition()
                         if(target.current && pos) {
                             target.current.value = `(${pos.x}, ${pos.y})`
                         }
+                        setActive(false)
                     } catch(e) {
                         console.log(e)
                     }
                 }
                 else {
-                    record.cancel()
+                    if(abortRef.current)
+                        abortRef.current.abort()
                 }
             }}>
             { active ? "Cancel" : "Set Position" }

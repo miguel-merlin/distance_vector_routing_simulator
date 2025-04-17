@@ -4,15 +4,12 @@ import { Vector2d } from "konva/lib/types";
 const CLICK_EVENT_ID = "SIM_CLICK"
 
 export class ClickRecord {
-    private _clickEvent: CustomEvent
-    private _cancelController: AbortController
+    private _clickEvent: Event
     target: Entity | null
     pos: Vector2d | null
 
     constructor() {
-        this._clickEvent = new CustomEvent(CLICK_EVENT_ID)
-        this._cancelController = new AbortController()
-
+        this._clickEvent = new Event(CLICK_EVENT_ID)
         this.target = null
         this.pos = null
     }
@@ -38,27 +35,25 @@ export class ClickRecord {
         dispatchEvent(this._clickEvent)
     }
 
-    cancel() {
-        this._cancelController.abort()
-    }
+    waitForUpdate() : [Promise<ClickRecord>, AbortController] {
+        const thisRef = this
+        const cancelController = new AbortController()
+        return [
+            new Promise((resolve, reject) => {
+                const cleanupController = new AbortController()
+                const finished = AbortSignal.any([cancelController.signal, cancelController.signal])
 
-    async waitForUpdate() : Promise<{ target: Entity | null, pos: Vector2d | null }> {
-        return new Promise((resolve, reject) => {
-            const cleanupController = new AbortController()
-            const canceled = this._cancelController.signal
-            const cleanup = cleanupController.signal
-
-            const finished = AbortSignal.any([canceled, cleanup])
-
-            addEventListener(CLICK_EVENT_ID, () => {
-                cleanupController.abort()
-                resolve({ target: this.target, pos: this.pos })
-            }, { signal: finished })
-
-            canceled.addEventListener("abort", () => {
-                cleanupController.abort()
-                reject("Canceled by user")
-            }, { signal: finished })
-        })
+                addEventListener(CLICK_EVENT_ID, () => {
+                    cleanupController.abort()
+                    resolve(thisRef)
+                }, { signal: finished })
+    
+                cancelController.signal.addEventListener("abort", () => {
+                    cleanupController.abort()
+                    reject("Canceled by user")
+                }, { signal: finished })
+            }),
+            cancelController
+        ]
     }
 }
