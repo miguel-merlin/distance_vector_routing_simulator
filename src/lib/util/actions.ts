@@ -5,6 +5,7 @@ import { Entity, EntityMap, uid } from "./entity";
 import { RStateHook } from "./react-aliases";
 import { CTRL } from "./typings";
 import { EmitterEntity } from "@/components/entity/Emitter";
+import { Vector2d } from "konva/lib/types";
 
 type StatelessPanelProp = Omit<PanelProps, "inputs">
 type ActionMap = Record<CTRL, (envState: RStateHook<EntityMap>) => StatelessPanelProp>
@@ -24,17 +25,17 @@ export const ACTION_MAP: ActionMap = {
         fields: [
             { key: "id", type: "string" },
             { key: "name", type: "string" },
-            { key: "x", type: "number" },
-            { key: "y", type: "number" }
+            { key: "position", type: "vector" },
         ],
-        onSubmit: ({ id, name, x, y }) => {
+        onSubmit: ({ id, name, position }) => {
             const uid = id as uid
+            const { x, y } = position as Vector2d
             const ent = Entity.of<NodeEntity>({
                 type: "ET_NODE",
                 id: uid,
                 name: name as string,
-                x: x as number,
-                y: y as number,
+                x: x,
+                y: y,
                 size: 25
             })
             saveEntity(envState, uid, ent)
@@ -44,8 +45,8 @@ export const ACTION_MAP: ActionMap = {
     CTRL_ADDEDGE: (envState) => ({
         fields: [
             { key: "id", type: "string" },
-            { key: "head", label: "Head Id", type: "string" },
-            { key: "tail", label: "Tail Id", type: "string" },
+            { key: "head", label: "Head Id", type: "id" },
+            { key: "tail", label: "Tail Id", type: "id" },
             { key: "weight", type: "number" }
         ],
         onSubmit: ({ id, head, tail, weight }) => {
@@ -66,18 +67,18 @@ export const ACTION_MAP: ActionMap = {
         fields: [
             { key: "id", type: "string" },
             { key: "name", type: "string" },
-            { key: "x", type: "number" },
-            { key: "y", type: "number" },
+            { key: "position", type: "vector" },
             { key: "spawnRate", type: "number" }
         ],
-        onSubmit: ({ id, name, x, y, spawnRate }) => {
+        onSubmit: ({ id, name, position, spawnRate }) => {
             const uid = id as uid
+            const { x, y } = position as Vector2d
             const ent = Entity.of<EmitterEntity>({
                 type: "ET_EMIT",
                 id: uid,
                 name: name as string,
-                x: x as number,
-                y: y as number,
+                x: x,
+                y: y,
                 size: 50,
                 spawnRate: spawnRate as number
             })
@@ -87,7 +88,7 @@ export const ACTION_MAP: ActionMap = {
 
     CTRL_DELETE: (envState) => ({
         fields: [
-            { key: "id", type: "string" }
+            { key: "id", type: "id" }
         ],
         onSubmit: ({ id }) => {
             const uid = id as uid
