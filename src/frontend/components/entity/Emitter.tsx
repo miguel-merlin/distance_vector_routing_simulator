@@ -5,7 +5,7 @@ import Label from "./util/Label";
 import Highlight from "./util/Highlight";
 import { useContext, useMemo, useState } from "react";
 import { ET_EMIT } from "+/util/typings";
-import { ClickContext, EntityContext, EventContext, TimeContext } from "+/util/contexts";
+import { ClickContext, EntityContext, PacketContext, TimeContext } from "+/util/contexts";
 
 export interface EmitterAttr extends BaseAttr {
     type: ET_EMIT
@@ -22,9 +22,10 @@ export type EmitterEntity = BaseEntity
 
 export default function Emitter({ ent, network }: EntityProp & EntityNetwork) {
     const t = useContext(TimeContext)
-    const queue = useContext(EventContext)
     const env = useContext(EntityContext)
+    const packetController = useContext(PacketContext)
     const record = useContext(ClickContext)
+
     const [hovered, setHovered] = useState(false)
     const targets = useMemo(() => {
         const nodelike = []
@@ -49,13 +50,16 @@ export default function Emitter({ ent, network }: EntityProp & EntityNetwork) {
         const path = network.getShortestPath(id, destId)
 
         if(path) {
-            queue.push({
-                ty: "EV_MK_PACKET",
-                data: {
-                    source: id,
-                    dest: destId,
-                    path: path.path
-                }
+            const pid = `PACKET_${id}-${destId}:${Date.now()}`
+            const jumps = path.path
+            jumps.shift()
+
+            packetController.pushPacket(pid, {
+                id: pid,
+                source: id,
+                dest: destId,
+                at: id,
+                jumps: jumps
             })
         }
     }

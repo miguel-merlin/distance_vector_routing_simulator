@@ -30,21 +30,18 @@ function getTrack(tstamp: number, start: Vector2d, dest: Vector2d, speed: number
     const { x: vx, y: vy } = velocity
     const TTL = bornAt + duration
 
-    return {
-        track: (t: number) => {
-            if(t > TTL)
-                return { done: true, pos: { x: 0, y: 0 } }
+    return (t: number) => {
+        if(t > TTL)
+            return { done: true, pos: { x: 0, y: 0 } }
 
-            const offset = t - bornAt
-            return {
-                done: false,
-                pos: {
-                    x: x + offset * vx,
-                    y: y + offset * vy
-                }
+        const offset = t - bornAt
+        return {
+            done: false,
+            pos: {
+                x: x + offset * vx,
+                y: y + offset * vy
             }
-        },
-        doneAt: TTL
+        }
     }
 }
 
