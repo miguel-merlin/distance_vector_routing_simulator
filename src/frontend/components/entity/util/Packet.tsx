@@ -1,6 +1,6 @@
 import { Packet as PacketType } from "+/interfaces/PacketController"
 import { EntityContext, PacketContext } from "+/util/contexts"
-import { generateTrack, getPacketColor } from "+/util/packet"
+import { generateTrack, getPacketColor } from "+/util/packet-util"
 import { useContext, useMemo } from "react"
 import { Rect } from "react-konva"
 
