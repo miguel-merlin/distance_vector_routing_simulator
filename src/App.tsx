@@ -12,7 +12,7 @@ function App() {
     ["B", Entity.of<EmitterEntity>({type: "ET_EMIT", id: "B", name: "B", x: 400, y: 400, size: 50, spawnRate: 5, disabled: true})],
     ["R1", Entity.of<NodeEntity>({type: "ET_NODE", id: "R1", name: "R1", x: 150, y: 250, size: 25})],
     ["e1", Entity.of<EdgeEntity>({type: "ET_EDGE", id: "e1", name: "e1", head: "A", tail: "R1", weight: 2})],
-    ["e2", Entity.of<EdgeEntity>({type: "ET_EDGE", id: "e1", name: "e1", head: "R1", tail: "B", weight: 2})]
+    ["e2", Entity.of<EdgeEntity>({type: "ET_EDGE", id: "e1", name: "e1", head: "R1", tail: "B", weight: 6})]
   ]))
   const pausedState = useState<boolean>(true);
   const [entMap] = envState

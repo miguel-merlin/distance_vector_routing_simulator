@@ -49,7 +49,7 @@ export function Simulator({ env, paused }: SimulatorProps) {
                 }
             }}>
             <Environment paused={paused} entMap={env}>
-                <PacketManager layer={packetLayer}>
+                <PacketManager env={env} network={network} layer={packetLayer}>
                     <Layer>
                         { layers.links.map((e, idx) => <Edge key={idx} ent={e}/>) }
                     </Layer>
