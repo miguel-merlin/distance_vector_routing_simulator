@@ -29,6 +29,35 @@ export class Entity {
         throw new Error(`Entity ${uid} does not exist in map.`)
     }
 
+    static save(entMap: EntityMap, uid: uid, ent: Entity, dependors?: uid[]): EntityMap {
+        ent.dependors = dependors || []
+        entMap.set(uid, ent)
+
+        if(dependors) {
+            for(const dependorId of dependors) {
+                const depEnt = Entity.lookup(entMap, dependorId)
+                depEnt.addDependent(uid)
+            }
+        }
+        return entMap
+    }
+
+    static delete(entMap: EntityMap, uid: uid): EntityMap {
+        const ent = Entity.lookup(entMap, uid)
+        for(const dependentId of ent.dependents) {
+            Entity.delete(entMap, dependentId)
+        }
+
+        // Update dependors of change
+        for(const dependorId of ent.dependors) {
+            const depEnt = Entity.lookup(entMap, dependorId)
+            depEnt.removeDependent(uid)
+        }
+
+        entMap.delete(uid)
+        return entMap
+    }
+
     /** Use static method of<T>() for better type safety */
     constructor(e: unknown) {
         this.ent = e
