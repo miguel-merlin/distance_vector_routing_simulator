@@ -15,6 +15,8 @@ export interface BaseEntity {
 
 export class Entity {
     ent: unknown
+    dependents: uid[]
+    dependors: uid[]
 
     static of<T extends BaseEntity>(ent: T): Entity {
         const e = new Entity(ent);
@@ -30,6 +32,8 @@ export class Entity {
     /** Use static method of<T>() for better type safety */
     constructor(e: unknown) {
         this.ent = e
+        this.dependents = []
+        this.dependors = []
     }
 
     is(t: ET): boolean {
@@ -50,5 +54,33 @@ export class Entity {
 
     getAttrReq<F extends BaseAttr>(): Required<F> {
         return (this.ent as Required<F>)
+    }
+
+    addDependent(id: uid) {
+        this.dependents.push(id)
+    }
+
+    removeDependent(id: uid) {
+        const idx = this.dependents.indexOf(id)
+        if(idx !== -1) {
+            this.dependents.splice(idx, 1)
+        }
+        else {
+            console.warn(`Removing non-existent dependent ${id}`)
+        }
+    }
+
+    addDependor(id: uid) {
+        this.dependors.push(id)
+    }
+
+    removeDependor(id: uid) {
+        const idx = this.dependors.indexOf(id)
+        if(idx !== -1) {
+            this.dependors.splice(idx, 1)
+        }
+        else {
+            console.warn(`Removing non-existent dependent ${id}`)
+        }
     }
 }
