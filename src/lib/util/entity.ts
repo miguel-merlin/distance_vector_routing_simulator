@@ -15,6 +15,8 @@ export interface BaseEntity {
 
 export class Entity {
     ent: unknown
+    dependents: uid[]
+    dependors: uid[]
 
     static of<T extends BaseEntity>(ent: T): Entity {
         const e = new Entity(ent);
@@ -27,9 +29,42 @@ export class Entity {
         throw new Error(`Entity ${uid} does not exist in map.`)
     }
 
+    static save(entMap: EntityMap, uid: uid, ent: Entity, dependors?: uid[]): EntityMap {
+        ent.dependors = dependors || []
+        entMap.set(uid, ent)
+
+        if(dependors) {
+            for(const dependorId of dependors) {
+                const depEnt = Entity.lookup(entMap, dependorId)
+                depEnt.addDependent(uid)
+            }
+        }
+        return entMap
+    }
+
+    static delete(entMap: EntityMap, uid: uid): EntityMap {
+        const ent = Entity.lookup(entMap, uid)
+
+        const deps = Array(...ent.dependents)
+        for(const dependentId of deps) {
+            Entity.delete(entMap, dependentId)
+        }
+
+        // Update dependors of change
+        for(const dependorId of ent.dependors) {
+            const depEnt = Entity.lookup(entMap, dependorId)
+            depEnt.removeDependent(uid)
+        }
+
+        entMap.delete(uid)
+        return entMap
+    }
+
     /** Use static method of<T>() for better type safety */
     constructor(e: unknown) {
         this.ent = e
+        this.dependents = []
+        this.dependors = []
     }
 
     is(t: ET): boolean {
@@ -50,5 +85,33 @@ export class Entity {
 
     getAttrReq<F extends BaseAttr>(): Required<F> {
         return (this.ent as Required<F>)
+    }
+
+    addDependent(id: uid) {
+        this.dependents.push(id)
+    }
+
+    removeDependent(id: uid) {
+        const idx = this.dependents.indexOf(id)
+        if(idx !== -1) {
+            this.dependents.splice(idx, 1)
+        }
+        else {
+            console.warn(`Removing non-existent dependent ${id}`)
+        }
+    }
+
+    addDependor(id: uid) {
+        this.dependors.push(id)
+    }
+
+    removeDependor(id: uid) {
+        const idx = this.dependors.indexOf(id)
+        if(idx !== -1) {
+            this.dependors.splice(idx, 1)
+        }
+        else {
+            console.warn(`Removing non-existent dependent ${id}`)
+        }
     }
 }
