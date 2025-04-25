@@ -1,11 +1,11 @@
 import { BaseAttr, ColorAttr, LabelAttr, PositionAttr, ShapeAttr } from "+/util/attributes";
 import { BaseEntity, EntityNetwork, EntityProp } from "+/util/entity";
-import { Group, Rect } from "react-konva";
+import { Rect } from "react-konva";
 import Label from "./util/Label";
-import Highlight from "./util/Highlight";
-import { useContext, useMemo, useState } from "react";
+import HighlightGroup from "./util/HighlightGroup";
+import { useContext, useMemo } from "react";
 import { ET_EMIT } from "+/util/typings";
-import { ClickContext, EntityContext, PacketContext, TimeContext } from "+/util/contexts";
+import { EntityContext, PacketContext, TimeContext } from "+/util/contexts";
 
 export interface EmitterAttr extends BaseAttr {
     type: ET_EMIT
@@ -24,9 +24,6 @@ export default function Emitter({ ent, network }: EntityProp & EntityNetwork) {
     const t = useContext(TimeContext)
     const env = useContext(EntityContext)
     const packetController = useContext(PacketContext)
-    const record = useContext(ClickContext)
-
-    const [hovered, setHovered] = useState(false)
     const targets = useMemo(() => {
         const nodelike = []
         const id = ent.getAs().id
@@ -65,17 +62,11 @@ export default function Emitter({ ent, network }: EntityProp & EntityNetwork) {
     }
 
     return (
-        <Group x={x} y={y} listening 
-            onMouseEnter={() => setHovered(true)} 
-            onMouseLeave={() => setHovered(false)}
-            onMouseUp={() => record.setTarget(ent)}>
-            <Group offsetX={size/2} offsetY={size/2}>
-                <Highlight type="ET_EMIT" size={size} color={highlightClr} visible={hovered}/>
-                <Rect fill={fillClr} stroke={strokeClr} strokeEnabled
-                    width={size} height={size}/>
-            </Group>
+        <HighlightGroup for={ent} x={x} y={y} style={{ type: "ET_EMIT", color: highlightClr, size: size }}>
+            <Rect offsetX={size/2} offsetY={size/2} 
+                fill={fillClr} stroke={strokeClr} strokeEnabled
+                width={size} height={size}/>
             <Label label={label} color={labelClr} fontFamily={fontFamily} fontSize={fontSize}/>
-        </Group>
-        
+        </HighlightGroup>
     )
 }
