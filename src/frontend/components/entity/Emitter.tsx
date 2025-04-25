@@ -3,7 +3,7 @@ import { BaseEntity, EntityNetwork, EntityProp } from "+/util/entity";
 import { Rect } from "react-konva";
 import Label from "./util/Label";
 import HighlightGroup from "./util/HighlightGroup";
-import { useContext, useMemo } from "react";
+import { useContext, useMemo, useRef } from "react";
 import { ET_EMIT } from "+/util/typings";
 import { EntityContext, PacketContext, TimeContext } from "+/util/contexts";
 
@@ -24,6 +24,7 @@ export default function Emitter({ ent, network }: EntityProp & EntityNetwork) {
     const t = useContext(TimeContext)
     const env = useContext(EntityContext)
     const packetController = useContext(PacketContext)
+    const lastSpawned = useRef(-1)
     const targets = useMemo(() => {
         const nodelike = []
         const id = ent.getAs().id
@@ -41,7 +42,7 @@ export default function Emitter({ ent, network }: EntityProp & EntityNetwork) {
     const { fillClr, highlightClr, strokeClr, labelClr } = ent.getAttrReq<ColorAttr>()
     const { label, fontFamily, fontSize } = ent.getAttrReq<LabelAttr>()
 
-    if(!disabled && targets.length >= 1 && t % spawnRate === 0) {
+    if(!disabled && targets.length >= 1 && t !== lastSpawned.current && t % spawnRate === 0) {
         const destId = targets[Math.floor(Math.random() * targets.length)]
         console.log(`${t}: Emitter ${id} picked destination ${destId}`)
         const path = network.getShortestPath(id, destId)
@@ -58,6 +59,7 @@ export default function Emitter({ ent, network }: EntityProp & EntityNetwork) {
                 at: id,
                 jumps: jumps
             })
+            lastSpawned.current = t
         }
     }
 
