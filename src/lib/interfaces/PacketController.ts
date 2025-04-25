@@ -25,6 +25,10 @@ export class PacketController {
         return mapped
     }
 
+    getPackets() {
+        return Array(...this.packets.values())
+    }
+
     pushPacket(id: uid, p: Packet) {
         this.packets.set(id, p)
     }
