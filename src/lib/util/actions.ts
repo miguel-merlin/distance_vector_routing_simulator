@@ -2,7 +2,7 @@ import { PanelProps } from "@/components/control/Panel";
 import { EdgeEntity } from "@/components/entity/Edge";
 import { NodeEntity } from "@/components/entity/Node";
 import { Entity, EntityMap, uid } from "./entity";
-import { RStateHook } from "./react-aliases";
+import { RStateHook, StateDispatch } from "./react-aliases";
 import { CTRL, ET } from "./typings";
 import { EmitterEntity } from "@/components/entity/Emitter";
 import { Vector2d } from "konva/lib/types";
@@ -10,14 +10,8 @@ import { Vector2d } from "konva/lib/types";
 type StatelessPanelProp = Omit<PanelProps, "inputs">
 type ActionMap = Record<CTRL, (envState: RStateHook<EntityMap>) => StatelessPanelProp>
 
-function saveEntity(envState: RStateHook<EntityMap>, uid: uid, ent: Entity | null) {
-    const [ents, setter] = envState
-    
-    if(ent)
-        ents.set(uid, ent)
-    else
-        ents.delete(uid)
-    setter(new Map(ents.entries()))
+function saveEnvState(setter: StateDispatch<EntityMap>, env: EntityMap) {
+    setter(new Map(env.entries()))
 }
 
 function generateId(type: ET) {
@@ -26,7 +20,7 @@ function generateId(type: ET) {
 }
 
 export const ACTION_MAP: ActionMap = {
-    CTRL_ADDNODE: (envState) => ({
+    CTRL_ADDNODE: ([env, setter]) => ({
         fields: [
             { key: "name", type: "string" },
             { key: "position", type: "vector" },
@@ -42,11 +36,12 @@ export const ACTION_MAP: ActionMap = {
                 y: y,
                 size: 25
             })
-            saveEntity(envState, uid, ent)
+            const newEnv = Entity.save(env, uid, ent)
+            saveEnvState(setter, newEnv)
         }
     }),
 
-    CTRL_ADDEDGE: (envState) => ({
+    CTRL_ADDEDGE: ([env, setter]) => ({
         fields: [
             { key: "head", label: "Head Id", type: "id" },
             { key: "tail", label: "Tail Id", type: "id" },
@@ -62,11 +57,12 @@ export const ACTION_MAP: ActionMap = {
                 head: head as uid,
                 tail: tail as uid
             })
-            saveEntity(envState, uid, ent)
+            const newEnv = Entity.save(env, uid, ent, [head as uid, tail as uid])
+            saveEnvState(setter, newEnv)
         }
     }),
 
-    CTRL_ADDEMIT: (envState) => ({
+    CTRL_ADDEMIT: ([env, setter]) => ({
         fields: [
             { key: "name", type: "string" },
             { key: "position", type: "vector" },
@@ -84,17 +80,19 @@ export const ACTION_MAP: ActionMap = {
                 size: 50,
                 spawnRate: spawnRate as number
             })
-            saveEntity(envState, uid, ent)
+            const newEnv = Entity.save(env, uid, ent)
+            saveEnvState(setter, newEnv)
         }
     }),
 
-    CTRL_DELETE: (envState) => ({
+    CTRL_DELETE: ([env, setter]) => ({
         fields: [
             { key: "id", type: "id" }
         ],
         onSubmit: ({ id }) => {
             const uid = id as uid
-            saveEntity(envState, uid, null)
+            const newEnv = Entity.delete(env, uid)
+            saveEnvState(setter, newEnv)
         }
     })
 }

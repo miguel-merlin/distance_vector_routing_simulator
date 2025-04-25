@@ -44,7 +44,9 @@ export class Entity {
 
     static delete(entMap: EntityMap, uid: uid): EntityMap {
         const ent = Entity.lookup(entMap, uid)
-        for(const dependentId of ent.dependents) {
+
+        const deps = Array(...ent.dependents)
+        for(const dependentId of deps) {
             Entity.delete(entMap, dependentId)
         }
 
