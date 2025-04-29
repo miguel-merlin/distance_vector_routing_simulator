@@ -31,7 +31,7 @@ export default function ControlUI({ envState, pausedState }: ControlUIProps) {
                             <button key={idx} 
                                 onClick={() => { 
                                     inputs.current = {} 
-                                    setPanel(<Panel {...panelProps}/>)
+                                    setPanel(<Panel key={idx} {...panelProps}/>)
                                 }}>
                                 {msg}
                             </button>
