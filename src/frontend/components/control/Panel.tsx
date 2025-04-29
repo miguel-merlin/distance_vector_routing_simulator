@@ -15,13 +15,11 @@ export interface PanelProps {
 }
 
 function parseFieldValue(type: FieldType, rawVal: string) : FieldValue {
-    console.log(type, rawVal)
     switch(type) {
         case "number":
             return Number.parseInt(rawVal)
         case "vector":
             const coords = rawVal.match(/\d+/g)
-            console.log(coords)
             if(!coords || coords.length !== 2) throw new Error(`Malformed vector given ${rawVal}`)
             return { x: Number.parseInt(coords[0]), y: Number.parseInt(coords[1]) }
         case "id_list":

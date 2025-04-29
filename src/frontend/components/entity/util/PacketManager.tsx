@@ -73,7 +73,6 @@ export default function PacketManager({ env, network, layer, children }: PacketM
     }, [env])
 
     useEffect(() => {
-        console.log(controller.getPackets())
         setPackets(controller.getPackets())
         redraw(layer, tmpLayer) 
     }, [t])
