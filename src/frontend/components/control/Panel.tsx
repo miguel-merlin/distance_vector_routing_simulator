@@ -1,9 +1,10 @@
 import Field, { RawInputContainer } from "./util/Field"
 import { RRefHook } from "+/util/react-aliases"
 import { Vector2d } from "konva/lib/types"
+import { uid } from "+/util/entity"
 
-export type FieldType = "number" | "string" | "vector" | "id"
-type FieldValue = number | string | Vector2d
+export type FieldType = "number" | "string" | "vector" | "id" | "id_list"
+type FieldValue = number | string | Vector2d | uid[] | undefined
 type FieldConf = { key: string, label?: string, type: FieldType }
 type InputContainer = Record<string, FieldValue>
 
@@ -23,6 +24,12 @@ function parseFieldValue(type: FieldType, rawVal: string) : FieldValue {
             console.log(coords)
             if(!coords || coords.length !== 2) throw new Error(`Malformed vector given ${rawVal}`)
             return { x: Number.parseInt(coords[0]), y: Number.parseInt(coords[1]) }
+        case "id_list":
+            if(rawVal === "[]") {
+                return []
+            }
+            const uids = rawVal.match(/[a-zA-Z_\-0-9]+/g)
+            return uids ? uids.map((v) => v) : undefined
         case "string":
         case "id":
             return rawVal

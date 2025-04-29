@@ -1,5 +1,5 @@
 import { BaseAttr, ColorAttr, LabelAttr, PositionAttr, ShapeAttr } from "+/util/attributes";
-import { BaseEntity, EntityNetwork, EntityProp } from "+/util/entity";
+import { BaseEntity, Entity, EntityMap, EntityNetwork, EntityProp, uid } from "+/util/entity";
 import { Rect } from "react-konva";
 import Label from "./util/Label";
 import HighlightGroup from "./util/HighlightGroup";
@@ -11,6 +11,18 @@ export interface EmitterAttr extends BaseAttr {
     type: ET_EMIT
     spawnRate: number
     disabled?: boolean
+    targets?: uid[]
+}
+
+function getTargets(env: EntityMap, ent: Entity) {
+    const nodelike = []
+    const id = ent.getAs().id
+    for(const e of env.values()) {
+        const eid = e.getAs().id
+        if(eid != id && e.is("ET_EMIT"))
+            nodelike.push(eid)
+    }
+    return nodelike
 }
 
 export type EmitterEntity = BaseEntity
@@ -26,14 +38,8 @@ export default function Emitter({ ent, network }: EntityProp & EntityNetwork) {
     const packetController = useContext(PacketContext)
     const lastSpawned = useRef(-1)
     const targets = useMemo(() => {
-        const nodelike = []
-        const id = ent.getAs().id
-        for(const e of env.values()) {
-            const eid = e.getAs().id
-            if(eid != id && e.is("ET_EMIT"))
-                nodelike.push(eid)
-        }
-        return nodelike
+        const { targets } = ent.getAttr<EmitterAttr>()
+        return targets || getTargets(env, ent)
     }, [env])
 
     const { spawnRate, disabled, id } = ent.getAs<EmitterEntity>()
