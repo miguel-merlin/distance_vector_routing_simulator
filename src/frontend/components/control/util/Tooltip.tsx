@@ -19,6 +19,7 @@ export default function Tooltip({ onFullfilled, text, cancelText }: TooltipProps
                 async (e) => {
                     e.preventDefault()
                     const state = !active
+                    record.flush()
                     setActive(state)
 
                     if(state) {
