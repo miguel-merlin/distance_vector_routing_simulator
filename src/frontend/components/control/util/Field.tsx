@@ -1,8 +1,7 @@
 import { RRefHook } from "+/util/react-aliases";
 import { ReactNode, useMemo, useRef } from "react";
 import { FieldType } from "../Panel";
-import IdTT from "./tooltip/IdTT";
-import PositionTT from "./tooltip/PositionTT";
+import Tooltip from "./Tooltip";
 
 export type RawInputContainer = Record<string, string>
 export interface FieldProps {
@@ -21,12 +20,29 @@ function setRef(ref: RRefHook<RawInputContainer>, k: string, v: string) {
 }
 
 function getTT(type: FieldType, ref: RRefHook<HTMLInputElement | null>, inputs: RRefHook<RawInputContainer>, k: string): ReactNode {
-    const trigger = (v: string) => setRef(inputs, k, v)
     switch(type) {
         case "id":
-            return <IdTT target={ref} trigger={trigger}/>
+            return <Tooltip 
+                text="Set Id" 
+                onFullfilled={(r) => {
+                    const ent = r.getTarget()
+                    if(ref.current && ent) {
+                        const v = ent.getAs().id
+                        ref.current.value = v
+                        setRef(inputs, k, v)
+                    }
+                }}/>
         case "vector":
-            return <PositionTT target={ref} trigger={trigger}/>
+            return <Tooltip 
+                text="Set Position"
+                onFullfilled={(r) => {
+                    const pos = r.getPosition()
+                    if(ref.current && pos) {
+                        const v = `(${Math.floor(pos.x)}, ${Math.floor(pos.y)})`
+                        ref.current.value = `(${Math.floor(pos.x)}, ${Math.floor(pos.y)})`
+                        setRef(inputs, k, v)
+                    }
+                }}/>
         default:
             return <></>
     }
