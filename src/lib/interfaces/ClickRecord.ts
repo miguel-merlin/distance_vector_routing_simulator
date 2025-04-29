@@ -56,4 +56,9 @@ export class ClickRecord {
             cancelController
         ]
     }
+
+    flush() {
+        this.target = null
+        this.pos = null
+    }
 }
