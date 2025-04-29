@@ -43,6 +43,23 @@ function getTT(type: FieldType, ref: RRefHook<HTMLInputElement | null>, inputs: 
                         setRef(inputs, k, v)
                     }
                 }}/>
+        case "id_list":
+            return <Tooltip
+                text="Add Target"
+                onFullfilled={(r) => {
+                    const ent = r.getTarget()
+                    const uid = ent?.getAs().id
+                    if(ref.current && uid) {
+                        const rawPrev = ref.current.value
+                        const matches = rawPrev.match(/[a-zA-Z_\-0-9]+/g)
+                        const uids = matches ? matches.map((v) => v) : []
+
+                        uids.push(uid)
+                        const newVal = uids.toString()
+                        ref.current.value = newVal
+                        setRef(inputs, k, newVal)
+                    }
+                }}/>
         default:
             return <></>
     }

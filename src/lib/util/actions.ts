@@ -66,9 +66,10 @@ export const ACTION_MAP: ActionMap = {
         fields: [
             { key: "name", type: "string" },
             { key: "position", type: "vector" },
-            { key: "spawnRate", type: "number" }
+            { key: "spawnRate", type: "number" },
+            { key: "targets", type: "id_list" }
         ],
-        onSubmit: ({ name, position, spawnRate }) => {
+        onSubmit: ({ name, position, spawnRate, targets }) => {
             const uid = generateId("ET_EMIT")
             const { x, y } = position as Vector2d
             const ent = Entity.of<EmitterEntity>({
@@ -78,7 +79,8 @@ export const ACTION_MAP: ActionMap = {
                 x: x,
                 y: y,
                 size: 50,
-                spawnRate: spawnRate as number
+                spawnRate: spawnRate as number,
+                targets: targets as uid[]
             })
             const newEnv = Entity.save(env, uid, ent)
             saveEnvState(setter, newEnv)
