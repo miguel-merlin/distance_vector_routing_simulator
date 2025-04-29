@@ -1,4 +1,3 @@
-import { Util } from "konva/lib/Util";
 import { ET, ATR } from "./typings";
 import { ColorAttr } from "./attributes";
 import { BaseEntity, Entity } from "./entity";
@@ -6,6 +5,14 @@ import { BaseEntity, Entity } from "./entity";
 type Value = string | number | undefined
 type Resolver = Value | ((e: Entity) => Value)
 type DefaultMap = Record<string, Resolver>
+
+function genColor(): string {
+    const n = Math.random()
+    const h = Math.floor(n * 360)
+    const s = Math.floor(n * 50 + 50)
+    const l = Math.floor(n * 20 + 60)
+    return `hsl(${h}, ${s}%, ${l}%)`
+}
 
 const attrMaps: Record<ET, ATR[]> = {
     ET_NODE: ["ATR_COLOR", "ATR_LABEL"],
@@ -15,7 +22,7 @@ const attrMaps: Record<ET, ATR[]> = {
 
 const defaultResolvers: Record<ATR, DefaultMap> = {
     ATR_COLOR: {
-        fillClr: (e: Entity) => e.is("ET_EMIT") ? Util.getRandomColor() : "lightgrey",
+        fillClr: (e: Entity) => e.is("ET_EMIT") ? genColor() : "lightgrey",
         strokeClr: 'black',
         highlightClr: (e: Entity) => e.is("ET_EDGE") || e.is("ET_NODE") ? "yellow" : (e.getAttr<ColorAttr>().fillClr),
         labelClr: 'black'
