@@ -9,13 +9,15 @@ import Environment from './components/entity/util/Environment'
 import PacketManager from './components/entity/util/PacketManager'
 import { ClickContext } from '+/util/contexts'
 import { Layer as LayerType } from 'konva/lib/Layer'
+import { RStateHook } from '+/util/react-aliases'
 
 interface SimulatorProps {
     env: EntityMap
     paused: boolean
+    netState?: RStateHook<Network | null>
 }
 
-export function Simulator({ env, paused }: SimulatorProps) {
+export function Simulator({ env, paused, netState }: SimulatorProps) {
     const record = useContext(ClickContext)
     const { layers, network } = useMemo(() => {
         const sortedEnts: { nodelike: Entity[], links: Entity[] } = { nodelike: [], links: [] }
@@ -35,6 +37,11 @@ export function Simulator({ env, paused }: SimulatorProps) {
         }
 
         network.runDistanceVectorRouting()
+
+        if(netState) {
+            const [_, setter] = netState
+            setter(network)
+        }
         return { layers: sortedEnts, network }
     }, [env])
     const packetLayer = useRef<LayerType | null>(null)
