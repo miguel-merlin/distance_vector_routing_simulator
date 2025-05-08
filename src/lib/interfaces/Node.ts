@@ -35,12 +35,19 @@ class Node {
   }
 
   printRoutingTable() {
+    const msg = []
+
     console.log(`Routing table for ${this.id}:`);
+    msg.push(`Routing table for ${this.id}:`)
+
     for (const [dest, entry] of this.routingTable.entries()) {
       console.log(
         `  Destination: ${dest}, Cost: ${entry.cost}, Next Hop: ${entry.nextHop}`
       );
+      msg.push(`  Destination: ${dest}, Cost: ${entry.cost}, Next Hop: ${entry.nextHop}`)
     }
+
+    return msg.join("\n")
   }
 }
 
