@@ -34,6 +34,7 @@ function App() {
 
   return (
     <div className="w-screen h-screen grid content-center place-content-center">
+      <h1 className="text-center text-2xl font-bold mb-2">Distance Vector Algorithm Network Simulator</h1>
       <div className="flex border-2 w-[750px] h-min">
         <div className="border-r-2">
           <Simulator paused={paused} env={entMap} netState={networkState}/>
