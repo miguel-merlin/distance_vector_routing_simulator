@@ -26,7 +26,8 @@ export const ACTION_MAP: ActionMap = {
             { key: "position", type: "vector" },
         ],
         onSubmit: ({ name, position }) => {
-            const uid = generateId("ET_NODE")
+            //const uid = generateId("ET_NODE")
+            const uid = name as string
             const { x, y } = position as Vector2d
             const ent = Entity.of<NodeEntity>({
                 type: "ET_NODE",
@@ -70,7 +71,8 @@ export const ACTION_MAP: ActionMap = {
             { key: "targets", type: "id_list" }
         ],
         onSubmit: ({ name, position, spawnRate, targets }) => {
-            const uid = generateId("ET_EMIT")
+            //const uid = generateId("ET_EMIT")
+            const uid = name as string
             const { x, y } = position as Vector2d
             const ent = Entity.of<EmitterEntity>({
                 type: "ET_EMIT",
