@@ -83,10 +83,13 @@ class Network {
   }
 
   printNetworkRoutingTables() {
+    const msg = []
     for (const node of this.nodes.values()) {
-      node.printRoutingTable();
+      msg.push(node.printRoutingTable());
       console.log("--------------------------");
+      msg.push("--------------------------")
     }
+    return msg.join("\n")
   }
 }
 
