@@ -1,4 +1,8 @@
 # Distance Vector Routing Simulator
+
+**This project requires Node.js to run with the NPM package manager (bundled with Node.js)
+Downloads for these are found on their official website [https://nodejs.org/en](https://nodejs.org/en).**
+
 Install all the dependencies
 ```bash
 npm install
@@ -16,7 +20,10 @@ npx tsx src/interfaces/Network.ts
 # AUTHORS
 
 Nathaniel Andre Escaro | [Github](https://github.com/butterman0423)
+
 Miguel Merlin | [Github](https://github.com/miguel-merlin)
+
+
 
 Repository can be found at [https://github.com/miguel-merlin/distance_vector_routing_simulator](https://github.com/miguel-merlin/distance_vector_routing_simulator)
 
